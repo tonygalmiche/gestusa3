@@ -1,0 +1,895 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!--Dossier Usager-->
+        <record model="ir.ui.view" id="g3_dossier_usager_tree_view">
+            <field name="name">g3.dossier.usager.tree</field>
+            <field name="model">g3.dossier.usager</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="usager_id" />
+                    <field name="identifiant" />
+                    <field name="color" widget="color"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_dossier_usager_form_view">
+            <field name="name">g3.dossier.usager.form</field>
+            <field name="model">g3.dossier.usager</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet class="oe_form_sheet_width_wider">
+                        <group string="Dossier Usager">
+                            <group>
+                                <field name="usager_id" domain="[('categorie', '=', 'usager')]"  />
+                            </group>
+                            <group>
+                                <div class="oe_right oe_button_box" > 
+                                        <field name="photo" widget='image' class="oe_left oe_avatar" 
+                                               options='{"preview_image": "photo", "size": [90, 90]}'
+                                               attrs="{'invisible': [('photo_vsb', '=', False)]}"/>
+                                </div>
+                                <field name="photo_vsb" attrs="{'invisible': 1}" />
+                            </group>
+                        </group>
+                        <group>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Identité" >
+                                <group>
+                                    <group>
+                                        <field name="usager_adresse1" />
+                                        <field name="identifiant"      attrs="{'invisible': [('identifiant_vsb', '=', False)]}"/>
+                                        <field name="identifiant_vsb"  attrs="{'invisible': 1}" />
+                                        <field name="nationalite_id"   attrs="{'invisible': [('nationalite_id_vsb', '=', False)]}" options="{'no_open': True}"/>
+                                        <field name="nationalite_id_vsb"  attrs="{'invisible': 1}" />
+                                    </group>
+                                    <group>
+                                        <field name="color" widget="color"/>
+                                        <!--
+                                        <field name="code_couleur"     attrs="{'invisible': [('code_couleur_vsb', '=', False)]}"/>
+                                        <field name="code_couleur_vsb" attrs="{'invisible': 1}" />-->
+                                    </group>
+                                </group>
+
+                                <div style="background-color:orange">ATTENTION : Ce tableau est utilisé pour donnéer l'accès aux structures pour ce dossier usager</div>
+                                <field name="etablissement_line" nolabel="1">
+                                    <tree editable="bottom"  create="true">
+                                        <field name="etablissement_id" widget="many2one_clickable" />
+                                        <field name="date_entree"/>
+                                        <field name="date_sortie_prevue"/>
+                                    </tree>
+                                </field>
+
+                            </page>
+
+                            <page string="Secrétariat" groups="gestusa3.group_g3_profil_01" >
+                                <p style="background-color:LawnGreen">Onglet visible uniquement au profil Secrétariat</p>
+                                <group string="Documents"            attrs="{'invisible': [('document_line_vsb', '=', False)]}">
+                                    <field name="document_line_vsb"  attrs="{'invisible': 1}" />
+                                    <field name="document_line"      nolabel="1" >
+                                        <tree editable="bottom"  create="true">
+                                            <field name="name" />
+                                            <field name="date" />
+                                            <field name="piece_jointe" />
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group>
+                                    <field name="num_secu"      attrs="{'invisible': [('num_secu_vsb', '=', False)]}" />
+                                    <field name="num_secu_vsb"  attrs="{'invisible': 1}" />
+                                </group>
+
+                                <group string="Notifications"            attrs="{'invisible': [('notification_line_vsb', '=', False)]}">
+                                    <field name="notification_line_vsb"  attrs="{'invisible': 1}" />
+                                    <field name="notification_line"      nolabel="1" >
+                                        <tree editable="bottom"  create="true" colors="red:date_fin and (date_fin&lt;current_date)" >
+                                            <field name="type_notification_id" />
+                                            <field name="numero" />
+                                            <field name="en_date" />
+                                            <field name="date_debut" />
+                                            <field name="date_fin" />
+                                            <field name="piece_jointe" />
+                                            <field name="prescripteur" widget="many2one_clickable"  />
+                                            <field name="commentaire" />
+                                        </tree>
+                                    </field>
+                                </group>
+
+
+                                <group string="Affiliations"            attrs="{'invisible': [('affiliation_line_vsb', '=', False)]}">
+                                    <field name="affiliation_line_vsb"  attrs="{'invisible': 1}" />
+                                    <field name="affiliation_line"      nolabel="1" >
+                                        <tree editable="bottom"  create="true" colors="red:date_fin and (date_fin&lt;current_date)" >
+                                            <field name="type_affiliation_id" />
+                                            <field name="type_assure_id" />
+                                            <field name="nom_assure_autre" />
+                                            <field name="numero" />
+                                            <field name="en_date" />
+                                            <field name="date_debut" />
+                                            <field name="date_fin" />
+                                            <field name="piece_jointe" />
+                                            <field name="affiliateur" widget="many2one_clickable" />
+                                            <field name="code_organisme" />
+                                            <field name="code_gestion" />
+                                            <field name="commentaire" />
+                                        </tree>
+                                    </field>
+                                </group>
+
+                            </page>
+                            <page string="Éducatif" groups="gestusa3.group_g3_profil_02" >
+                                <p style="background-color:LawnGreen">Onglet visible uniquement au profil Educatif</p>
+                                <group>
+                                    <group>
+                                        <field name="regime_hebergement_id"      attrs="{'invisible': [('regime_hebergement_id_vsb', '=', False)]}"/>
+                                        <field name="regime_hebergement_id_vsb"  attrs="{'invisible': 1}" />
+
+                                        <field name="referent_usager_id"      attrs="{'invisible': [('referent_usager_id_vsb', '=', False)]}" />
+                                        <field name="referent_usager_id_vsb"  attrs="{'invisible': 1}" />
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+
+                                <group>
+                                    <group string="Référents"      attrs="{'invisible': [('referent_line_vsb', '=', False)]}">
+                                        <field name="referent_line_vsb"  attrs="{'invisible': 1}" />
+                                        <field name="referent_line"      nolabel="1" >
+                                            <tree editable="bottom"  create="true"  >
+                                                <field name="accompagnement_id" />
+                                                <field name="nom" />
+                                            </tree>
+                                        </field>
+                                    </group>
+                                    <group string="Groupe(s) éducatif(s)"      attrs="{'invisible': [('groupe_educatif_line_vsb', '=', False)]}">
+                                        <field name="groupe_educatif_line_vsb"  attrs="{'invisible': 1}" />
+                                        <field name="groupe_educatif_line"      nolabel="1" >
+                                            <tree editable="bottom"  create="true"  >
+                                                <field name="name" />
+                                            </tree>
+                                        </field>
+                                    </group>
+                                </group>
+
+                                <group>
+                                    <group string="Atelier(s)"      attrs="{'invisible': [('atelier_line_vsb', '=', False)]}">
+                                        <field name="atelier_line_vsb"  attrs="{'invisible': 1}" />
+                                        <field name="atelier_line"      nolabel="1" >
+                                            <tree editable="bottom"  create="true"  >
+                                                <field name="name" />
+                                            </tree>
+                                        </field>
+                                    </group>
+                                    <group string="Classe(s)"      attrs="{'invisible': [('classe_line_vsb', '=', False)]}">
+                                        <field name="classe_line_vsb"  attrs="{'invisible': 1}" />
+                                        <field name="classe_line"      nolabel="1" >
+                                            <tree editable="bottom"  create="true"  >
+                                                <field name="name" />
+                                            </tree>
+                                        </field>
+                                    </group>
+                                </group>
+
+
+                            </page>
+
+
+                            <page string="Paramédical" groups="gestusa3.group_g3_profil_03" >
+                                <p style="background-color:LawnGreen">Onglet visible uniquement au profil Paramédical</p>
+                            </page>
+                            <page string="Entourage" >
+                                <field name="contact_line" nolabel="1">
+                                    <tree editable="bottom"  create="true">
+
+                                        <!--
+                                        <button 
+                                            type="object" string="Accèder à la fiche" name="open_full_record" 
+                                            icon="gtk-next" attrs="{'invisible': [('name','=',False)]}"
+                                        />
+                                        -->
+
+                                        <field 
+                                            name="name" 
+                                            domain="[('categorie', '=', 'entourage')]" 
+                                            widget="many2one_clickable" 
+                                        />
+                                        <field name="lien_id" />
+                                        <field name="responsable_legal"/>
+                                        <field name="commentaire"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Situation familiale" >
+                                <group>
+                                    <group>
+                                        <field name="situation_parent_id"      attrs="{'invisible': [('situation_parent_id_vsb', '=', False)]}"/>
+                                        <field name="situation_parent_id_vsb"  attrs="{'invisible': 1}" />
+                                        <field name="situation_usager_id"      attrs="{'invisible': [('situation_usager_id_vsb', '=', False)]}"/>
+                                        <field name="situation_usager_id_vsb"  attrs="{'invisible': 1}" />
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                                <field name="info_pratique_line_vsb" attrs="{'invisible': 1}" />
+                                <field name="info_pratique_line"     attrs="{'invisible': [('info_pratique_line_vsb', '=', False)]}" nolabel="1" >
+                                    <tree editable="bottom"  create="true">
+                                        <field name="name" />
+                                        <field name="commentaire"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Autorisations" >
+                                <field name="autorisation_line_vsb" attrs="{'invisible': 1}" />
+                                <field name="autorisation_line"     attrs="{'invisible': [('autorisation_line_vsb', '=', False)]}" nolabel="1" >
+                                    <tree editable="bottom"  create="true">
+                                        <field name="name" />
+                                        <field name="date" />
+                                        <field name="fichier" />
+                                        <field name="commentaire"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Partenaires extérieurs" >
+                                <field name="partenaire_line_vsb" attrs="{'invisible': 1}" />
+                                <field name="partenaire_line"     attrs="{'invisible': [('partenaire_line_vsb', '=', False)]}" nolabel="1" >
+                                    <tree editable="bottom"  create="true">
+                                        <field name="name" domain="[('categorie', '=', 'partenaire_exterieur')]" widget="many2one_clickable" />
+                                        <field name="categorie_partenaire_id" />
+                                        <field name="commentaire"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Parcours" >
+
+                                <group string="Parcours antérieur"  attrs="{'invisible': [('parcours_line_vsb', '=', False)]}" >
+                                    <field name="parcours_line_vsb" attrs="{'invisible': 1}" />
+                                    <field name="parcours_line"     nolabel="1"  >
+                                        <tree editable="bottom" create="true">
+                                            <field name="date_entree" />
+                                            <field name="type_structure_id" />
+                                            <field name="nom_structure" />
+                                            <field name="date_sortie" />
+                                            <field name="commentaire" />
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Diplômes et attestations" attrs="{'invisible': [('diplome_line_vsb', '=', False)]}" >
+                                    <field name="diplome_line_vsb"       attrs="{'invisible': 1}" />
+                                    <field name="diplome_line"           nolabel="1" >
+                                        <tree editable="bottom" create="true">
+                                            <field name="name" />
+                                            <field name="date" />
+                                            <field name="piece_jointe" />
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Formation"            attrs="{'invisible': [('formation_line_vsb', '=', False)]}">
+                                    <field name="formation_line_vsb" attrs="{'invisible': 1}" />
+                                    <field name="formation_line"     nolabel="1" >
+                                        <tree editable="bottom" create="true">
+                                            <field name="name" />
+                                            <field name="date_debut" />
+                                            <field name="date_fin" />
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+
+                            <page string="Accessibilités" >
+                                <field name="accessibilite_line" nolabel="1">
+                                    <tree editable="bottom"  create="false">
+                                        <field name="etablissement_id" readonly="1" widget="many2one_clickable" />
+                                        <field name="group_01"/>
+                                        <field name="group_02"/>
+                                        <field name="group_03"/>
+                                        <field name="group_04"/>
+                                        <field name="group_05"/>
+                                        <field name="group_06"/>
+                                        <field name="group_07"/>
+                                        <field name="group_08"/>
+                                    </tree>
+                                </field>
+                                <group groups="base.group_system">
+                                    <field name="group_01_id" readonly="1"/>
+                                    <field name="group_02_id" readonly="1"/>
+                                    <field name="group_03_id" readonly="1"/>
+                                    <field name="group_04_id" readonly="1"/>
+                                    <field name="group_05_id" readonly="1"/>
+                                    <field name="group_06_id" readonly="1"/>
+                                    <field name="group_07_id" readonly="1"/>
+                                    <field name="group_08_id" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_dossier_usager_search_view" >
+            <field name="name">g3.dossier.usager.search</field>
+            <field name="model">g3.dossier.usager</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="usager_id"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_dossier_usager_action" model="ir.actions.act_window">
+            <field name="name">Dossier Usager</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.dossier.usager</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <!--Groupe Gestusa3-->
+        <record model="ir.ui.view" id="g3_groupe_tree_view">
+            <field name="name">g3.groupe.tree</field>
+            <field name="model">g3.groupe</field>
+            <field name="arch" type="xml">
+                <tree string="Etablissement">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="dossier_usager_id"/>
+                    <field name="membre_ids"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_groupe_form_view">
+            <field name="name">g3.groupe.form</field>
+            <field name="model">g3.groupe</field>
+            <field name="arch" type="xml">
+            <form string="Etablissement">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="dossier_usager_id"/>
+                        <field name="membre_ids" widget="many2many_tags" />
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_groupe_search_view" >
+            <field name="name">g3.groupe.search</field>
+            <field name="model">g3.groupe</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="dossier_usager_id"/>
+                    <field name="membre_ids" />
+                </search>
+            </field>
+        </record>
+        <record id="g3_groupe_action" model="ir.actions.act_window">
+            <field name="name">Groupe Gestusa3</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.groupe</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!--Nationalité-->
+        <record model="ir.ui.view" id="g3_nationalite_tree_view">
+            <field name="name">g3.nationalite.tree</field>
+            <field name="model">g3.nationalite</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_nationalite_form_view">
+            <field name="name">g3.nationalite.form</field>
+            <field name="model">g3.nationalite</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_nationalite_search_view" >
+            <field name="name">g3.nationalite.search</field>
+            <field name="model">g3.nationalite</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_nationalite_action" model="ir.actions.act_window">
+            <field name="name">Nationalité</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.nationalite</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--Lien avec l'usager-->
+        <record model="ir.ui.view" id="g3_lien_tree_view">
+            <field name="name">g3.lien.tree</field>
+            <field name="model">g3.lien</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_lien_form_view">
+            <field name="name">g3.lien.form</field>
+            <field name="model">g3.lien</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_lien_search_view" >
+            <field name="name">g3.lien.search</field>
+            <field name="model">g3.lien</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_lien_action" model="ir.actions.act_window">
+            <field name="name">Lien avec l'usager</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.lien</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!--Situation familiale-->
+        <record model="ir.ui.view" id="g3_situation_familiale_tree_view">
+            <field name="name">g3.situation.familiale.tree</field>
+            <field name="model">g3.situation.familiale</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_situation_familiale_form_view">
+            <field name="name">g3.situation.familiale.form</field>
+            <field name="model">g3.situation.familiale</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_situation_familiale_search_view" >
+            <field name="name">g3.situation.familiale.search</field>
+            <field name="model">g3.situation.familiale</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_situation_familiale_action" model="ir.actions.act_window">
+            <field name="name">Situation familiale</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.situation.familiale</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!--Information pratique-->
+        <record model="ir.ui.view" id="g3_info_pratique_tree_view">
+            <field name="name">g3.info.pratique.tree</field>
+            <field name="model">g3.info.pratique</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_info_pratique_form_view">
+            <field name="name">g3.info.pratique.form</field>
+            <field name="model">g3.info.pratique</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_info_pratique_search_view" >
+            <field name="name">g3.info.pratique.search</field>
+            <field name="model">g3.info.pratique</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_info_pratique_action" model="ir.actions.act_window">
+            <field name="name">Information pratique</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.info.pratique</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!--Type d'autorisation-->
+        <record model="ir.ui.view" id="g3_type_autorisation_tree_view">
+            <field name="name">g3.type.autorisation.tree</field>
+            <field name="model">g3.type.autorisation</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_autorisation_form_view">
+            <field name="name">g3.type.autorisation.form</field>
+            <field name="model">g3.type.autorisation</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_autorisation_search_view" >
+            <field name="name">g3.type.autorisation.search</field>
+            <field name="model">g3.type.autorisation</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_type_autorisation_action" model="ir.actions.act_window">
+            <field name="name">Type d'autorisation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.type.autorisation</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--Catégorie de partenaire-->
+        <record model="ir.ui.view" id="g3_categorie_partenaire_tree_view">
+            <field name="name">g3.categorie.partenaire.tree</field>
+            <field name="model">g3.categorie.partenaire</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_categorie_partenaire_form_view">
+            <field name="name">g3.categorie.partenaire.form</field>
+            <field name="model">g3.categorie.partenaire</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_categorie_partenaire_search_view" >
+            <field name="name">g3.categorie.partenaire.search</field>
+            <field name="model">g3.categorie.partenaire</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_categorie_partenaire_action" model="ir.actions.act_window">
+            <field name="name">Catégorie de partenaire</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.categorie.partenaire</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--Type de structure-->
+        <record model="ir.ui.view" id="g3_type_structure_tree_view">
+            <field name="name">g3.type.structure.tree</field>
+            <field name="model">g3.type.structure</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_structure_form_view">
+            <field name="name">g3.type.structure.form</field>
+            <field name="model">g3.type.structure</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_structure_search_view" >
+            <field name="name">g3.type.structure.search</field>
+            <field name="model">g3.type.structure</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_type_structure_action" model="ir.actions.act_window">
+            <field name="name">Type de structure</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.type.structure</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <!--Type de document -->
+        <record model="ir.ui.view" id="g3_type_document_tree_view">
+            <field name="name">g3.type.document.tree</field>
+            <field name="model">g3.type.document</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_document_form_view">
+            <field name="name">g3.type.document.form</field>
+            <field name="model">g3.type.document</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_document_search_view" >
+            <field name="name">g3.type.document.search</field>
+            <field name="model">g3.type.document</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_type_document_action" model="ir.actions.act_window">
+            <field name="name">Type de document</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.type.document</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!--Type de notification -->
+        <record model="ir.ui.view" id="g3_type_notification_tree_view">
+            <field name="name">g3.type.notification.tree</field>
+            <field name="model">g3.type.notification</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_notification_form_view">
+            <field name="name">g3.type.notification.form</field>
+            <field name="model">g3.type.notification</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_notification_search_view" >
+            <field name="name">g3.type.notification.search</field>
+            <field name="model">g3.type.notification</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_type_notification_action" model="ir.actions.act_window">
+            <field name="name">Type de notification</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.type.notification</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!--Type d'affiliation -->
+        <record model="ir.ui.view" id="g3_type_affiliation_tree_view">
+            <field name="name">g3.type.affiliation.tree</field>
+            <field name="model">g3.type.affiliation</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_affiliation_form_view">
+            <field name="name">g3.type.affiliation.form</field>
+            <field name="model">g3.type.affiliation</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_affiliation_search_view" >
+            <field name="name">g3.type.affiliation.search</field>
+            <field name="model">g3.type.affiliation</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_type_affiliation_action" model="ir.actions.act_window">
+            <field name="name">Type d'affiliation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.type.affiliation</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <!--Type d'assuré -->
+        <record model="ir.ui.view" id="g3_type_assure_tree_view">
+            <field name="name">g3.type.assure.tree</field>
+            <field name="model">g3.type.assure</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_assure_form_view">
+            <field name="name">g3.type.assure.form</field>
+            <field name="model">g3.type.assure</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_type_assure_search_view" >
+            <field name="name">g3.type.assure.search</field>
+            <field name="model">g3.type.assure</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_type_assure_action" model="ir.actions.act_window">
+            <field name="name">Type d'assuré</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.type.assure</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!--Régime d'hebergement -->
+        <record model="ir.ui.view" id="g3_regime_hebergement_tree_view">
+            <field name="name">g3.regime.hebergement.tree</field>
+            <field name="model">g3.regime.hebergement</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_regime_hebergement_form_view">
+            <field name="name">g3.regime.hebergement.form</field>
+            <field name="model">g3.regime.hebergement</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_regime_hebergement_search_view" >
+            <field name="name">g3.regime.hebergement.search</field>
+            <field name="model">g3.regime.hebergement</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_regime_hebergement_action" model="ir.actions.act_window">
+            <field name="name">Régime d'hebergement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.regime.hebergement</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <!--Accompagnement -->
+        <record model="ir.ui.view" id="g3_accompagnement_tree_view">
+            <field name="name">g3.accompagnement.tree</field>
+            <field name="model">g3.accompagnement</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_accompagnement_form_view">
+            <field name="name">g3.accompagnement.form</field>
+            <field name="model">g3.accompagnement</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_accompagnement_search_view" >
+            <field name="name">g3.accompagnement.search</field>
+            <field name="model">g3.accompagnement</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_accompagnement_action" model="ir.actions.act_window">
+            <field name="name">Accompagnement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.accompagnement</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+</data>
+</openerp>

@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+
+
+    <!-- Etablissement -->
+    <record id="g3_etablissement_access_complet_administrateur" model="ir.rule">
+        <field name="name">Établissement - Accès complet Administateur</field>
+        <field name="model_id" ref="model_g3_etablissement"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field eval="1" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="1" name="perm_create"/>
+    </record>
+    <record id="g3_etablissement_access_modification_directeur" model="ir.rule">
+        <field name="name">Établissement - Accès en modification aux directeurs de l'établissement</field>
+        <field name="model_id" ref="model_g3_etablissement"/>
+        <field name="domain_force">['|', ( 'directeur_id', '=', user.id), ( 'responsable_id', '=', user.id) ]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field eval="0" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="0" name="perm_create"/>
+    </record>
+    <record id="g3_etablissement_access_consultation_membre" model="ir.rule">
+        <field name="name">Établissement - Accès en consultation aux membres de l'établissement</field>
+        <field name="model_id" ref="model_g3_etablissement"/>
+        <field name="domain_force">['|', '|',  ( 'directeur_id', '=', user.id), ( 'responsable_id', '=', user.id), ( 'membre_ids', 'in', user.id) ]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field eval="0" name="perm_unlink"/>
+        <field eval="0" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="0" name="perm_create"/>
+    </record>
+
+
+
+    <!-- Profils Métier -->
+    <record id="g3_profil_metier_access_complet_administrateur" model="ir.rule">
+        <field name="name">Profils Métier - Accès complet administateur à tous les profils</field>
+        <field name="model_id" ref="model_g3_profil_metier"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field eval="1" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="1" name="perm_create"/>
+    </record>
+    <record id="g3_profil_metier_access_modification_directeur" model="ir.rule">
+        <field name="name">Profils Métier - Accès en modification aux directeurs et responsables de leur établissement</field>
+        <field name="model_id" ref="model_g3_profil_metier"/>
+        <field name="domain_force">['|', ( 'etablissement_id.directeur_id', '=', user.id), ( 'etablissement_id.responsable_id', '=', user.id) ]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field eval="0" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="0" name="perm_create"/>
+    </record>
+    <record id="g3_profil_metier_access_consultation_membres" model="ir.rule">
+        <field name="name">Profils Métier - Accès en consultation aux membres de leur établissement</field>
+        <field name="model_id" ref="model_g3_profil_metier"/>
+        <field name="domain_force">[( 'etablissement_id.membre_ids', 'in', user.id) ]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field eval="0" name="perm_unlink"/>
+        <field eval="0" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="0" name="perm_create"/>
+    </record>
+
+
+
+    <!-- Dossier usager -->
+    <record id="g3_dossier_usager_access_complet_administrateur" model="ir.rule">
+        <field name="name">Dossier usager - Accès complet administateur à tous les dossiers</field>
+        <field name="model_id" ref="model_g3_dossier_usager"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field eval="1" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="1" name="perm_create"/>
+    </record>
+    <record id="g3_dossier_usager_access_consultation_da" model="ir.rule">
+        <field name="name">Dossier usager - Accès en consultation au groupe DA</field>
+        <field name="model_id" ref="model_g3_dossier_usager"/>
+        <field name="domain_force">[( 'group_01_id.membre_ids', 'in', user.id) ]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field eval="0" name="perm_unlink"/>
+        <field eval="0" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="0" name="perm_create"/>
+    </record>
+    <record id="g3_dossier_usager_access_modification_dam" model="ir.rule">
+        <field name="name">Dossier usager - Accès en modification au groupe DAM</field>
+        <field name="model_id" ref="model_g3_dossier_usager"/>
+        <field name="domain_force">[( 'group_02_id.membre_ids', 'in', user.id) ]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field eval="0" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="0" name="perm_create"/>
+    </record>
+    <record id="g3_dossier_usager_access_creation_secretariat" model="ir.rule">
+        <field name="name">Dossier usager - Accès en création au groupe Secretariat</field>
+        <field name="model_id" ref="model_g3_dossier_usager"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('gestusa3.group_g3_secretariat'))]"/>
+        <field eval="0" name="perm_unlink"/>
+        <field eval="0" name="perm_write"/>
+        <field eval="0" name="perm_read"/>
+        <field eval="1" name="perm_create"/>
+    </record>
+
+
+
+
+    </data>
+</openerp>

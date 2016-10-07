@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+
+        <!--Etablissement-->
+        <record model="ir.ui.view" id="g3_etablissement_tree_view">
+            <field name="name">g3.etablissement.tree</field>
+            <field name="model">g3.etablissement</field>
+            <field name="arch" type="xml">
+                <tree string="Etablissement">
+                    <field name="name"/>
+                    <field name="identifiant"/>
+                    <field name="directeur_id"/>
+                    <field name="responsable_id"/>
+                    <field name="adresse1"/>
+                    <field name="adresse2"/>
+                    <field name="cp"/>
+                    <field name="ville"/>
+                    <field name="telephone"/>
+                    <field name="fax"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_etablissement_form_view">
+            <field name="name">g3.etablissement.form</field>
+            <field name="model">g3.etablissement</field>
+            <field name="arch" type="xml">
+            <form string="Etablissement">
+                <sheet class="oe_form_sheet_width_wider">
+                    <group>
+                        <group string="Etablissement">
+                            <field name="name"/>
+                            <field name="directeur_id"/>
+
+                            <field name="identifiant"     attrs="{'invisible': [('identifiant_vsb', '=', False)]}"/>
+                            <field name="identifiant_vsb" attrs="{'invisible': 1}"/>
+
+                            <field name="responsable_id"/>
+                            <field name="membre_ids" widget="many2many_tags" />
+                        </group>
+                        <group>
+
+                            <field name="adresse1"     attrs="{'invisible': [('adresse1_vsb', '=', False)]}"/>
+                            <field name="adresse1_vsb" attrs="{'invisible': 1}"/>
+
+                            <field name="adresse2"     attrs="{'invisible': [('adresse2_vsb', '=', False)]}"/>
+                            <field name="adresse2_vsb" attrs="{'invisible': 1}"/>
+
+                            <field name="cp"     attrs="{'invisible': [('cp_vsb', '=', False)]}"/>
+                            <field name="cp_vsb" attrs="{'invisible': 1}"/>
+
+                            <field name="ville"     attrs="{'invisible': [('ville_vsb', '=', False)]}"/>
+                            <field name="ville_vsb" attrs="{'invisible': 1}"/>
+
+                            <field name="telephone"     attrs="{'invisible': [('telephone_vsb', '=', False)]}"/>
+                            <field name="telephone_vsb" attrs="{'invisible': 1}"/>
+
+                            <field name="fax"     attrs="{'invisible': [('fax_vsb', '=', False)]}"/>
+                            <field name="fax_vsb" attrs="{'invisible': 1}"/>
+
+                        </group>
+                    </group>
+                    <group string="Droits d'accès des membres de l'établissement" groups="base.group_system,gestusa3.group_g3_directeur">
+                        <field name="membres_line" nolabel="1">
+                            <tree string="Professionnels" editable="bottom">
+                                <field name="profil_id" on_change="onchange_profil_id(profil_id)"/>
+                                <field name="profil_metier_id"/>
+                                <field name="group_01"/>
+                                <field name="group_02"/>
+                                <field name="group_03"/>
+                                <field name="group_04"/>
+                                <field name="group_05"/>
+                                <field name="group_06"/>
+                                <field name="group_07"/>
+                                <field name="group_08"/>
+                                <field name="etablissement_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_etablissement_search_view" >
+            <field name="name">g3.etablissement.search</field>
+            <field name="model">g3.etablissement</field>
+            <field name="arch" type="xml">
+                <search string="Etablissement">
+                    <field name="name"/>
+                    <field name="directeur_id"/>
+                    <field name="identifiant"/>
+                    <field name="responsable_id"/>
+                    <field name="membre_ids" />
+                    <field name="cp"/>
+                    <field name="ville"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_etablissement_action" model="ir.actions.act_window">
+            <field name="name">Etablissement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.etablissement</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+</data>
+</openerp>

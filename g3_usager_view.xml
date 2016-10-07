@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+
+        <!--Usager-->
+        <record model="ir.ui.view" id="g3_usager_tree_view">
+            <field name="name">g3.usager.tree</field>
+            <field name="model">g3.usager</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="nom"/>
+                    <field name="prenom"/>
+                    <field name="categorie"/>
+                    <field name="type"/>
+                    <field name="sexe"/>
+                    <field name="date_naissance"/>
+                    <field name="lieu_naissance"/>
+                    <field name="profession_id"/>
+                    <field name="cat_socio_id"/>
+                    <field name="vit_avec_id"/>
+
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_usager_form_view">
+            <field name="name">g3.usager.form</field>
+            <field name="model">g3.usager</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Contact">
+                            <group>
+                                <field name="categorie"/>
+                                <field name="type"            attrs="{'invisible': ['|',('categorie', '=', False),('categorie', '=', 'usager')]}"/>
+                                <field name="sexe"            attrs="{'invisible': ['|',('categorie', '=', False),('type', '=', 'morale')]}"/>
+                                <field name="nom"             attrs="{'invisible': [('categorie', '=', False)]}"/>
+                                <field name="nom_jeune_fille" attrs="{'invisible': ['|',('type', '=', 'morale'),('sexe', '!=', 'feminin')]}"/>
+                                <field name="prenom"          attrs="{'invisible': ['|',('categorie', '=', False),('type', '=', 'morale')]}"/>
+                            </group>
+                            <group>
+                                <field name="date_naissance"  attrs="{'invisible': [('categorie', '!=', 'usager')]}"/>
+                                <field name="lieu_naissance"  attrs="{'invisible': [('categorie', '!=', 'usager')]}"/>
+                                <field 
+                                    name  = "profession_id"   
+                                    attrs = "{'invisible': ['|',('categorie', '=', False),('categorie', '!=', 'partenaire_exterieur')]}"
+                                />
+                                <field name="cat_socio_id"    attrs="{'invisible': ['|',('categorie', '=', False),('categorie', '!=', 'entourage')]}"/>
+
+
+                                <field 
+                                    name      = "vit_avec_id"     
+                                    attrs     = "{'invisible': [('categorie', '!=', 'usager')]}"
+                                    domain    = "[('categorie', '=', 'entourage')]"
+                                    on_change = "onchange_vit_avec(vit_avec_id)" 
+                                    context   = "{'default_categorie' : 'entourage', 'default_type' : 'physique'}" 
+                                />
+                                <field name="domicile_secours" attrs="{'invisible': [('categorie', '!=', 'usager')]}"/>
+
+
+
+                            </group>
+                        </group>
+                        <group string="Coordonnées" attrs="{'invisible': [('categorie', '=', False)]}">
+                            <group>
+                                <field name="adresse1"    attrs  = "{'readonly': [('vit_avec_id', '!=', False)]}"/>
+                                <field name="adresse2"    attrs  = "{'readonly': [('vit_avec_id', '!=', False)]}"/>
+                                <field name="cp"          attrs  = "{'readonly': [('vit_avec_id', '!=', False)]}"/>
+                                <field name="ville"       attrs  = "{'readonly': [('vit_avec_id', '!=', False)]}"/>
+                            </group>
+                            <group>
+                                <field name="telephone"/>
+                                <field name="mobile"/>
+                                <field name="courriel"/>
+                            </group>
+                        </group>
+
+                        <group string="Domicile de secours" attrs="{'invisible': [('domicile_secours', '!=', True)]}">
+                            <group>
+                                <field name="secours_adresse1" />
+                                <field name="secours_adresse2" />
+                            </group>
+                            <group>
+                                <field name="secours_cp"       />
+                                <field name="secours_ville"    />
+                            </group>
+                        </group>
+
+
+
+                        <group attrs="{'invisible': [('categorie', '=', False)]}">
+                            <field name="commentaire"/>
+                        </group>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_usager_search_view" >
+            <field name="name">g3.usager.search</field>
+            <field name="model">g3.usager</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="nom"/>
+                    <field name="prenom"/>
+                    <field name="sexe"/>
+                    <field name="categorie"/>
+                    <field name="type"/>
+                    <field name="sexe"/>
+                    <field name="profession_id"/>
+                    <field name="cat_socio_id"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_usager_action" model="ir.actions.act_window">
+            <field name="name">Contact</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.usager</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!--Profession-->
+        <record model="ir.ui.view" id="g3_profession_tree_view">
+            <field name="name">g3.profession.tree</field>
+            <field name="model">g3.profession</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_profession_form_view">
+            <field name="name">g3.profession.form</field>
+            <field name="model">g3.profession</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_profession_search_view" >
+            <field name="name">g3.profession.search</field>
+            <field name="model">g3.profession</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_profession_action" model="ir.actions.act_window">
+            <field name="name">Profession</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.profession</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!--Catégorie socio-professionnelle-->
+        <record model="ir.ui.view" id="g3_cat_socio_professionnelle_tree_view">
+            <field name="name">g3.cat.socio.professionnelle.tree</field>
+            <field name="model">g3.cat.socio.professionnelle</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_cat_socio_professionnelle_form_view">
+            <field name="name">g3.cat.socio.professionnelle.form</field>
+            <field name="model">g3.cat.socio.professionnelle</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_cat_socio_professionnelle_search_view" >
+            <field name="name">g3.cat.socio.professionnelle.search</field>
+            <field name="model">g3.cat.socio.professionnelle</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_cat_socio_professionnelle_action" model="ir.actions.act_window">
+            <field name="name">Catégorie socio-professionnelle</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.cat.socio.professionnelle</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+</data>
+</openerp>

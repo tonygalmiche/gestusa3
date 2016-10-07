@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+  <data>
+
+        <menuitem name="Gestusa3"            id="menu_gestusa3"         sequence="1" />
+
+        <menuitem name="Dossiers Usagers"    id="menu_usager"           sequence="10" parent="menu_gestusa3"                                     groups=""/>
+        <menuitem name="Dossiers Usagers"    id="menu_usager_10"        sequence="10" parent="menu_usager" action="g3_dossier_usager_action"     groups=""/>
+        <menuitem name="Contacts"            id="menu_usager_20"        sequence="20" parent="menu_usager" action="g3_usager_action"             groups="base.group_system,gestusa3.group_g3_directeur,gestusa3.group_g3_secretariat"  />
+
+        <menuitem name="Etablissements"   id="menu_etablissement"    sequence="20" parent="menu_gestusa3"  />
+        <menuitem name="Etablissements"   id="menu_etablissement_10" sequence="10" parent="menu_etablissement" action="g3_etablissement_action" />
+
+        <menuitem name="Configuration"    id="menu_configuration"    sequence="30" parent="menu_gestusa3"      groups="base.group_system,gestusa3.group_g3_directeur" />
+        <menuitem name="Profils Métier"   id="menu_profil_metier"    sequence="10" parent="menu_configuration" action="g3_profil_metier_action" />
+
+        <menuitem name="Tables"                    id="menu_tables"               sequence="40" parent="menu_gestusa3" groups="base.group_system,gestusa3.group_g3_directeur" />
+        <menuitem name="Nationalité"               id="menu_nationalite"          sequence="10" parent="menu_tables"   action="g3_nationalite_action" />
+        <menuitem name="Profession"                id="menu_profession"           sequence="20" parent="menu_tables"   action="g3_profession_action" />
+        <menuitem name="Catégorie socio-professionnelle" id="menu_cat_socio"            sequence="25" parent="menu_tables"   action="g3_cat_socio_professionnelle_action" />
+        <menuitem name="Lien avec l'usager"        id="menu_lien"                 sequence="30" parent="menu_tables"   action="g3_lien_action" />
+        <menuitem name="Situation familiale"       id="menu_situation_familiale"  sequence="40" parent="menu_tables"   action="g3_situation_familiale_action" />
+        <menuitem name="Information pratique"      id="menu_info_pratique"        sequence="50" parent="menu_tables"   action="g3_info_pratique_action" />
+        <menuitem name="Type d'autorisation"       id="menu_type_autorisation"    sequence="60" parent="menu_tables"   action="g3_type_autorisation_action" />
+        <menuitem name="Catégorie de partenaire"   id="menu_categorie_partenaire" sequence="70" parent="menu_tables"   action="g3_categorie_partenaire_action" />
+        <menuitem name="Type de structure"         id="menu_type_structure"       sequence="80" parent="menu_tables"   action="g3_type_structure_action" />
+        <menuitem name="Type de document"          id="menu_type_document"        sequence="82" parent="menu_tables"   action="g3_type_document_action" />
+        <menuitem name="Type de notification"      id="menu_type_notification"    sequence="84" parent="menu_tables"   action="g3_type_notification_action" />
+        <menuitem name="Type d'affiliation"        id="menu_type_affiliation"     sequence="86" parent="menu_tables"   action="g3_type_affiliation_action" />
+        <menuitem name="Type d'assuré"             id="menu_type_assure"          sequence="88" parent="menu_tables"   action="g3_type_assure_action" />
+        <menuitem name="Régime d'hebergement"      id="menu_regime_hebergement"   sequence="90" parent="menu_tables"   action="g3_regime_hebergement_action" />
+        <menuitem name="Accompagnement"            id="menu_accompagnement"       sequence="92" parent="menu_tables"   action="g3_accompagnement_action" />
+
+
+        <menuitem name="Paramétrage"              id="menu_parametrage_root" sequence="2"  groups="base.group_system" />
+        <menuitem name="Paramétrage "             id="menu_parametrage"      sequence="10" parent="menu_parametrage_root"  />
+        <menuitem name="Profils"                  id="menu_parametrage_10"   sequence="10" parent="menu_parametrage" action="g3_profil_action" />
+        <menuitem name="Groupes Gestusa3"         id="menu_parametrage_20"   sequence="20" parent="menu_parametrage" action="g3_groupe_action" />
+        <menuitem name="Configuration des champs" id="menu_parametrage_30"   sequence="30" parent="menu_parametrage" action="g3_config_champ_action" groups="base.group_system" />
+
+        <!-- Déplacer les menus inutiles -->
+        <menuitem id="base.menu_base_partner"       sequence="900" name="Ventes"       parent="base.menu_administration"/>
+
+  </data>
+</openerp>
+

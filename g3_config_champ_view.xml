@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+
+        <record model="ir.ui.view" id="g3_config_champ_tree_view">
+            <field name="name">g3.config.champ.tree</field>
+            <field name="model">g3.config.champ</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_config_champ_form_view">
+            <field name="name">g3.config.champ.form</field>
+            <field name="model">g3.config.champ</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet class="oe_form_sheet_width_wider">
+                    <group>
+                        <group string="Configuration des champs">
+                            <field name="name" context="{'config_champ': 1}"  />
+                        </group>
+                    </group>
+                    <group>
+                        <field name="champs_line" nolabel="1"  context="{'model':name}">
+                            <tree editable="bottom">
+                                <field name="model_id"  invisible="1"/>
+                                <field name="name" domain="[('model_id', '=', model)]" context="{'config_champ': 1}" />
+                                <field name="vsb"/>
+                                <!--<field name="rqr"/>-->
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_config_champ_search_view" >
+            <field name="name">g3.config.champ.search</field>
+            <field name="model">g3.config.champ</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_config_champ_action" model="ir.actions.act_window">
+            <field name="name">Configuration des champs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.config.champ</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+</data>
+</openerp>

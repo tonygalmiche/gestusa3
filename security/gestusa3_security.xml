@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+
+    <record id="module_category_g3" model="ir.module.category" >
+        <field name="name">Gestusa3</field>
+        <field name="description">Gestusa3</field>
+        <field name="sequence">10</field>
+   </record>
+    <record id="group_g3_directeur" model="res.groups">
+        <field name="name">Directeur ou responsable d'établissement</field>
+        <field name="comment">Groupe ayant accès à la configuration de leurs établissements</field>
+        <field name="category_id" ref="module_category_g3"/>
+    </record>
+    <record id="group_g3_secretariat" model="res.groups">
+        <field name="name">Secrétariat</field>
+        <field name="comment">Groupe ayant accès à la création et modification de tous les usagers</field>
+        <field name="category_id" ref="module_category_g3"/>
+    </record>
+
+
+    <record id="module_category_g3_profil" model="ir.module.category" >
+        <field name="name">Profils Gestusa3</field>
+        <field name="description">Profil Gestusa3</field>
+        <field name="sequence">10</field>
+   </record>
+    <record id="group_g3_profil_01" model="res.groups">
+        <field name="name">Secrétariat</field>
+        <field name="category_id" ref="module_category_g3_profil"/>
+    </record>
+    <record id="group_g3_profil_02" model="res.groups">
+        <field name="name">Educatif</field>
+        <field name="category_id" ref="module_category_g3_profil"/>
+    </record>
+    <record id="group_g3_profil_03" model="res.groups">
+        <field name="name">Paramédical</field>
+        <field name="category_id" ref="module_category_g3_profil"/>
+    </record>
+
+
+
+</data>
+</openerp>

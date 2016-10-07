@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+
+        <!--Profil-->
+        <record model="ir.ui.view" id="g3_profil_tree_view">
+            <field name="name">g3.profil.tree</field>
+            <field name="model">g3.profil</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="group_id" domain="[('category_id.name','=','Profils Gestusa3')]"/>
+                    <field name="group_01"/>
+                    <field name="group_02"/>
+                    <field name="group_03"/>
+                    <field name="group_04"/>
+                    <field name="group_05"/>
+                    <field name="group_06"/>
+                    <field name="group_07"/>
+                    <field name="group_08"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_profil_form_view">
+            <field name="name">g3.profil.form</field>
+            <field name="model">g3.profil</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Identification">
+                            <field name="name"/>
+                            <field name="group_id" domain="[('category_id.name','=','Profils Gestusa3')]"/>
+                            <field name="group_01"/>
+                            <field name="group_02"/>
+                            <field name="group_03"/>
+                            <field name="group_04"/>
+                            <field name="group_05"/>
+                            <field name="group_06"/>
+                            <field name="group_07"/>
+                            <field name="group_08"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_profil_search_view" >
+            <field name="name">g3.profil.search</field>
+            <field name="model">g3.profil</field>
+            <field name="arch" type="xml">
+                <search string="Etablissement">
+                    <field name="name"/>
+                    <field name="group_id"/>
+                </search>
+            </field>
+        </record>
+        <record id="g3_profil_action" model="ir.actions.act_window">
+            <field name="name">Profil</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.profil</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <!--Profil Métier-->
+        <record model="ir.ui.view" id="g3_profil_metier_tree_view">
+            <field name="name">g3.profil.metier.tree</field>
+            <field name="model">g3.profil.metier</field>
+            <field name="arch" type="xml">
+                <tree create="0">
+                    <field name="etablissement_id"/>
+                    <field name="name"/>
+                    <field name="membre_ids"/>
+                    <field name="profil_id" groups="base.group_system"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_profil_metier_form_view">
+            <field name="name">g3.profil.metier.form</field>
+            <field name="model">g3.profil.metier</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Identification">
+                            <field name="name"             readonly="1"/>
+                            <field name="profil_id"        readonly="1" groups="base.group_system"/>
+                            <field name="etablissement_id" readonly="1"/>
+                            <field name="membre_ids" widget="many2many_tags" context="{'etablissement_id': etablissement_id}"  />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="g3_profil_metier_search_view" >
+            <field name="name">g3.profil.metier.search</field>
+            <field name="model">g3.profil.metier</field>
+            <field name="arch" type="xml">
+                <search string="Etablissement">
+                    <field name="name"/>
+                    <field name="etablissement_id"/>
+                    <field name="membre_ids" />
+                </search>
+            </field>
+        </record>
+        <record id="g3_profil_metier_action" model="ir.actions.act_window">
+            <field name="name">Profil Métier</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">g3.profil.metier</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+</data>
+</openerp>

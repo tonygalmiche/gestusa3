@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="g3_profil_01" model="g3.profil">
+            <field name="name">Secrétariat</field>
+            <field name="group_id" ref="group_g3_profil_01"/>
+        </record>
+        <record id="g3_profil_02" model="g3.profil">
+            <field name="name">Educatif</field>
+            <field name="group_id" ref="group_g3_profil_02"/>
+        </record>
+        <record id="g3_profil_03" model="g3.profil">
+            <field name="name">Paramédical</field>
+            <field name="group_id" ref="group_g3_profil_03"/>
+        </record>
+    </data>
+</openerp>   
