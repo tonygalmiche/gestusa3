@@ -43,7 +43,7 @@ access_g3_dossier_usager_groupe_educatif,access_g3_dossier_usager_groupe_educati
 access_g3_dossier_usager_atelier,access_g3_dossier_usager_atelier,model_g3_dossier_usager_atelier,base.group_user,1,1,1,1
 access_g3_dossier_usager_classe,access_g3_dossier_usager_classe,model_g3_dossier_usager_classe,base.group_user,1,1,1,1
 
-
+access_g3_donnee_metier,access_g3_donnee_metier,model_g3_donnee_metier,base.group_user,1,1,1,1
 
 
 

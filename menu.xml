@@ -9,6 +9,9 @@
         <menuitem name="Dossiers Usagers"    id="menu_usager_10"        sequence="10" parent="menu_usager" action="g3_dossier_usager_action"     groups=""/>
         <menuitem name="Contacts"            id="menu_usager_20"        sequence="20" parent="menu_usager" action="g3_usager_action"             groups="base.group_system,gestusa3.group_g3_directeur,gestusa3.group_g3_secretariat"  />
 
+        <menuitem name="Données Métiers" id="donnee_metier_main_menu" sequence="15" parent="menu_gestusa3"                                            groups=""/>
+        <menuitem name="Données Métiers" id="donnee_metier_menu"      sequence="10" parent="donnee_metier_main_menu" action="g3_donnee_metier_action" groups=""/>
+
         <menuitem name="Etablissements"   id="menu_etablissement"    sequence="20" parent="menu_gestusa3"  />
         <menuitem name="Etablissements"   id="menu_etablissement_10" sequence="10" parent="menu_etablissement" action="g3_etablissement_action" />
 

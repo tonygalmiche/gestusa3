@@ -10,6 +10,7 @@ Gestusa3
     'maintainer': 'InfoSaone',
     'website': 'http://www.infosaone.com',
     'depends': [
+        'web_ckeditor4',
     ],
     'data': [
         'security/gestusa3_security.xml',
@@ -20,6 +21,7 @@ Gestusa3
         'g3_profil_metier_view.xml',
         'g3_usager_view.xml',
         'g3_dossier_usager_view.xml',
+        'g3_donnee_metier_view.xml',
         'g3_config_champ_view.xml',
         'res_users_view.xml',
         'menu.xml',
