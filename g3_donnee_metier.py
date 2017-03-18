@@ -2,6 +2,7 @@
 
 from openerp import models,fields,api
 from openerp.tools.translate import _
+from openerp.exceptions import Warning
 import uuid
 from appy.pod.renderer import Renderer
 
@@ -26,7 +27,15 @@ class g3_donnee_metier(models.Model):
 
 
     @api.multi
+    def generation_pdf(self):
+        raise Warning(u"Fonction non finalisée !")
+
+
+    @api.multi
     def generation_odt(self):
+        raise Warning(u"Fonction non finalisée !")
+
+
         for obj in self:
             print obj
 

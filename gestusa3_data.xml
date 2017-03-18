@@ -10,7 +10,7 @@
             <field name="group_id" ref="group_g3_profil_02"/>
         </record>
         <record id="g3_profil_03" model="g3.profil">
-            <field name="name">Paramédical</field>
+            <field name="name">Soins</field>
             <field name="group_id" ref="group_g3_profil_03"/>
         </record>
     </data>

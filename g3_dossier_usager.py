@@ -29,6 +29,19 @@ from dateutil.relativedelta import relativedelta
 # - Mettre en place un script (tache plannifiée dans Odoo) qui recalculera les dossiers usagers en fonction de la date d'entrée ou de sortie de celui-ci
 
 
+def set_visibility(self, champs):
+    for obj in self:
+        for champ in champs:
+            setattr(obj, champ+"_vsb", True)
+        for model in self.env['ir.model'].search([['model','=',self._name]]):
+            for config_champ in self.env['g3.config.champ'].search([['name','=',model.id]]):
+                for line in self.env['g3.config.champ.line'].search([['model_id','=',config_champ.id]]):
+                    for champ in champs:
+                        if line.name.name==champ:
+                            if not line.vsb:
+                                setattr(obj, champ+"_vsb", False)
+
+
 
 class g3_dossier_usager(models.Model):
     _name='g3.dossier.usager'
@@ -42,6 +55,7 @@ class g3_dossier_usager(models.Model):
     photo                     = fields.Binary("Photo")
     photo_vsb                 = fields.Boolean('Champ technique', store=False, compute='_compute')
     etablissement_line        = fields.One2many('g3.dossier.usager.etablissement', 'dossier_usager_id', u"Etablissements")
+    etablissement_ids         = fields.Many2many('g3.etablissement', 'g3_dossier_usager_etablissement_rel', 'dossier_id', 'etablissement_id', u"Etablissements", store=True, compute='_compute_etablissement_ids')
     code_couleur              = fields.Selection(g3_couleurs, "Code couleur")
     code_couleur_vsb          = fields.Boolean('Champ technique', store=False, compute='_compute')
     color                     = fields.Char(string="Color", help="Choose your color")
@@ -60,6 +74,15 @@ class g3_dossier_usager(models.Model):
     affiliation_line          = fields.One2many('g3.dossier.usager.affiliation', 'dossier_usager_id', u"Affiliations")
     affiliation_line_vsb      = fields.Boolean('Champ technique', store=False, compute='_compute')
 
+    sejour_line               = fields.One2many('g3.dossier.usager.sejour', 'dossier_usager_id', u"Séjours")
+    sejour_line_vsb           = fields.Boolean('Champ technique', store=False, compute='_compute')
+
+    genogramme                = fields.Binary('Génogramme')
+    genogramme_vsb            = fields.Boolean('Champ technique', store=False, compute='_compute')
+
+    mesure_protection_line    = fields.One2many('g3.dossier.usager.mesure.protection', 'dossier_usager_id', u"Mesure de protection")
+    mesure_protection_vsb     = fields.Boolean('Champ technique', store=False, compute='_compute')
+
     contact_line              = fields.One2many('g3.dossier.usager.contact', 'dossier_usager_id', u"Contacts")
     situation_parent_id       = fields.Many2one('g3.situation.familiale', 'Situation des parents')
     situation_parent_id_vsb   = fields.Boolean('Champ technique', store=False, compute='_compute')
@@ -77,24 +100,7 @@ class g3_dossier_usager(models.Model):
     diplome_line_vsb          = fields.Boolean('Champ technique', store=False, compute='_compute')
     formation_line            = fields.One2many('g3.dossier.usager.formation', 'dossier_usager_id', u"Formations")
     formation_line_vsb        = fields.Boolean('Champ technique', store=False, compute='_compute')
-    regime_hebergement_id     = fields.Many2one('g3.regime.hebergement', "Régime d'hébergement")
-    regime_hebergement_id_vsb = fields.Boolean('Champ technique', store=False, compute='_compute')
 
-    referent_usager_id        = fields.Many2one('res.users', 'Référent usager')
-    referent_usager_id_vsb    = fields.Boolean('Champ technique', store=False, compute='_compute')
-
-    referent_line             = fields.One2many('g3.dossier.usager.referent', 'dossier_usager_id', u"Référents")
-    referent_line_vsb         = fields.Boolean('Champ technique', store=False, compute='_compute')
-
-
-    groupe_educatif_line      = fields.One2many('g3.dossier.usager.groupe.educatif', 'dossier_usager_id', u"Groupe(s) éducatif(s)")
-    groupe_educatif_line_vsb  = fields.Boolean('Champ technique', store=False, compute='_compute')
-
-    atelier_line      = fields.One2many('g3.dossier.usager.atelier', 'dossier_usager_id', u"Atelier(s)")
-    atelier_line_vsb  = fields.Boolean('Champ technique', store=False, compute='_compute')
-
-    classe_line      = fields.One2many('g3.dossier.usager.classe', 'dossier_usager_id', u"Classe(s)")
-    classe_line_vsb  = fields.Boolean('Champ technique', store=False, compute='_compute')
 
 
 
@@ -138,9 +144,21 @@ class g3_dossier_usager(models.Model):
         #***********************************************************************
 
 
+
+    @api.depends('etablissement_line')
+    def _compute_etablissement_ids(self):
+        for obj in self:
+            etablissement_ids  = []
+            for line in obj.etablissement_line:
+                etablissement_ids.append(line.etablissement_id.id)
+            obj.etablissement_ids=[(6,0,etablissement_ids)]
+
+
+
+
     @api.depends('usager_id')
     def _compute(self):
-        #** Visibilité des champs **********************************************
+        """Visibilité des champs"""
         champs=[
             'identifiant',
             'photo',
@@ -160,22 +178,10 @@ class g3_dossier_usager(models.Model):
             'affiliation_line',
             'regime_hebergement_id',
             'referent_usager_id',
-            'referent_line',
-            'groupe_educatif_line',
-            'atelier_line',
-            'classe_line',
+            'genogramme',
         ]
-        for obj in self:
-            for champ in champs:
-                setattr(obj, champ+"_vsb", True)
-            for model in self.env['ir.model'].search([['model','=',self._name]]):
-                for config_champ in self.env['g3.config.champ'].search([['name','=',model.id]]):
-                    for line in self.env['g3.config.champ.line'].search([['model_id','=',config_champ.id]]):
-                        for champ in champs:
-                            if line.name.name==champ:
-                                if not line.vsb:
-                                    setattr(obj, champ+"_vsb", False)
-        #***********************************************************************
+        set_visibility(self, champs)
+
 
     @api.multi
     @api.depends('usager_id')
@@ -205,14 +211,8 @@ class g3_dossier_usager(models.Model):
     @api.multi
     def contraintes(self,obj):
         # Blocage si un dossier existe pour cet usager
-
-
         obj=obj.sudo()
         usager_id=obj.usager_id.id
-
-        print obj, usager_id
-
-
         dossiers=self.env['g3.dossier.usager'].search([ ['usager_id', '=', usager_id] ])
         if len(dossiers)>1:
             #Nom des structures ou cet usager est présent
@@ -342,7 +342,6 @@ class g3_dossier_usager(models.Model):
 
         obj=obj.sudo()
 
-        print "gestion_groupes=",obj
         #for obj in self.sudo():
         for groupe in g3_groupes:
             #Recherche des membres des groupes en fonction des access dans l'établissement et dans l'usager
@@ -438,8 +437,66 @@ class g3_dossier_usager_etablissement(models.Model):
 
     dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
     etablissement_id   = fields.Many2one('g3.etablissement', 'Etablissement'  , required=True)
+    provenance_id      = fields.Many2one('g3.etablissement', 'Provenance')
     date_entree        = fields.Date("Date d'entrée", required=True)
     date_sortie_prevue = fields.Date("Date de sortie prévue")
+    destination_id     = fields.Many2one('g3.etablissement', 'Destination')
+
+
+class g3_dossier_usager_sejour(models.Model):
+    _name='g3.dossier.usager.sejour'
+    _order='dossier_usager_id,date_entree'
+
+    dossier_usager_id         = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    etablissement_id          = fields.Many2one('g3.etablissement', 'Etablissement'  , required=True)
+    date_entree               = fields.Date("Date d'entrée", required=True)
+    date_sortie               = fields.Date("Date de sortie")
+
+    regime_hebergement_id     = fields.Many2one('g3.regime.hebergement', "Régime d'hébergement")
+    regime_hebergement_id_vsb = fields.Boolean('Champ technique', store=False, compute='_compute')
+
+    referent_usager_id        = fields.Many2one('res.users', 'Référent usager')
+    referent_usager_id_vsb    = fields.Boolean('Champ technique', store=False, compute='_compute')
+
+    referent_line             = fields.One2many('g3.dossier.usager.referent', 'sejour_id', u"Référents")
+    referent_line_vsb         = fields.Boolean('Champ technique', store=False, compute='_compute')
+
+    groupe_educatif_line      = fields.One2many('g3.dossier.usager.groupe.educatif', 'sejour_id', u"Groupe(s) éducatif(s)")
+    groupe_educatif_line_vsb  = fields.Boolean('Champ technique', store=False, compute='_compute')
+
+    atelier_line              = fields.One2many('g3.dossier.usager.atelier', 'sejour_id', u"Atelier(s)")
+    atelier_line_vsb          = fields.Boolean('Champ technique', store=False, compute='_compute')
+
+    classe_line               = fields.One2many('g3.dossier.usager.classe', 'sejour_id', u"Classe(s)")
+    classe_line_vsb           = fields.Boolean('Champ technique', store=False, compute='_compute')
+
+
+    @api.depends('etablissement_id')
+    def _compute(self):
+        """Visibilité des champs"""
+        champs=[
+            'regime_hebergement_id',
+            'referent_usager_id',
+            'referent_line',
+            'groupe_educatif_line',
+            'atelier_line',
+            'classe_line',
+        ]
+        set_visibility(self, champs)
+
+
+
+
+class g3_dossier_usager_mesure_protection(models.Model):
+    _name='g3.dossier.usager.mesure.protection'
+    _order='dossier_usager_id,date_debut'
+
+    dossier_usager_id = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    type_mesure       = fields.Selection([('tutelle','Tutelle'),('curatelle','Curatelle')], "Type de mesure")
+    date_debut        = fields.Date("Date de début", required=True)
+    date_fin          = fields.Date("Date de fin")
+    piece_jointe      = fields.Binary('Pièce jointe')
+    commentaire       = fields.Char("Commentaire")
 
 
 class g3_dossier_usager_document(models.Model):
@@ -580,7 +637,7 @@ class g3_dossier_usager_info_pratique(models.Model):
 class g3_dossier_usager_referent(models.Model):
     _name='g3.dossier.usager.referent'
     _order='accompagnement_id'
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Dossier usager', required=True, ondelete='cascade')
     accompagnement_id  = fields.Many2one('g3.accompagnement', 'Accompagnement')
     nom                = fields.Char('Commentaire')
 
@@ -588,25 +645,25 @@ class g3_dossier_usager_referent(models.Model):
 class g3_dossier_usager_groupe_educatif(models.Model):
     _name='g3.dossier.usager.groupe.educatif'
     _order='name'
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id  = fields.Many2one('g3.dossier.usager.sejour', 'Dossier usager', required=True, ondelete='cascade')
     name = fields.Char('Nom')
 
 class g3_dossier_usager_groupe_educatif(models.Model):
     _name='g3.dossier.usager.groupe.educatif'
     _order='name'
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Dossier usager', required=True, ondelete='cascade')
     name = fields.Char('Nom')
 
 class g3_dossier_usager_atelier(models.Model):
     _name='g3.dossier.usager.atelier'
     _order='name'
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Dossier usager', required=True, ondelete='cascade')
     name = fields.Char('Nom')
 
 class g3_dossier_usager_classe(models.Model):
     _name='g3.dossier.usager.classe'
     _order='name'
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Dossier usager', required=True, ondelete='cascade')
     name = fields.Char('Nom')
 
 

@@ -5,6 +5,8 @@ from openerp.tools.translate import _
 from openerp.exceptions import Warning
 from parametres import g3_groupes
 
+from g3_dossier_usager import set_visibility
+
 
 class g3_etablissement(models.Model):
     _name='g3.etablissement'
@@ -15,6 +17,9 @@ class g3_etablissement(models.Model):
 
     identifiant    = fields.Char('Identifiant')
     identifiant_vsb= fields.Boolean('Champ technique', store=False, compute='_compute')
+
+    etablissement_parent_id     = fields.Many2one('g3.etablissement', 'Etablissement parent')
+    etablissement_parent_id_vsb = fields.Boolean('Champ technique', store=False, compute='_compute')
 
     directeur_id   = fields.Many2one('res.users', 'Directeur', required=True)
     responsable_id = fields.Many2one('res.users', 'Responsable')
@@ -48,18 +53,19 @@ class g3_etablissement(models.Model):
 
     @api.depends()
     def _compute(self):
-        champs=['identifiant','adresse1','adresse2','cp','ville','telephone','fax']
-        for obj in self:
-            for champ in champs:
-                setattr(obj, champ+"_vsb", True)
-            vsb=True
-            for model in self.env['ir.model'].search([['model','=',self._name]]):
-                for config_champ in self.env['g3.config.champ'].search([['name','=',model.id]]):
-                    for line in self.env['g3.config.champ.line'].search([['model_id','=',config_champ.id]]):
-                        for champ in champs:
-                            if line.name.name==champ:
-                                if not line.vsb:
-                                    setattr(obj, champ+"_vsb", False)
+        champs=['identifiant','adresse1','adresse2','cp','ville','telephone','fax','etablissement_parent_id']
+        set_visibility(self, champs)
+#        for obj in self:
+#            for champ in champs:
+#                setattr(obj, champ+"_vsb", True)
+#            vsb=True
+#            for model in self.env['ir.model'].search([['model','=',self._name]]):
+#                for config_champ in self.env['g3.config.champ'].search([['name','=',model.id]]):
+#                    for line in self.env['g3.config.champ.line'].search([['model_id','=',config_champ.id]]):
+#                        for champ in champs:
+#                            if line.name.name==champ:
+#                                if not line.vsb:
+#                                    setattr(obj, champ+"_vsb", False)
 
 
 
@@ -158,7 +164,9 @@ class g3_etablissement(models.Model):
     @api.multi
     def create_profil_metier(self,obj):
         for line in obj.membres_line:
-            if not line.profil_metier_id:
+            if line.profil_metier_id:
+                line.profil_metier_id.name=line.profil_id.name
+            else:
                 v={
                     'etablissement_id': obj.id,
                     'name': line.profil_id.name,

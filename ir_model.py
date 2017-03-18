@@ -27,6 +27,7 @@ class ir_model(models.Model):
                     'g3.dossier.usager',
                     'g3.dossier.usager.accessibilite',
                     'g3.dossier.usager.etablissement',
+                    'g3.dossier.usager.sejour',
                 ]]]
             if name:
                 filtre.append(['model','ilike',name])

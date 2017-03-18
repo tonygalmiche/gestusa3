@@ -38,16 +38,12 @@ access_g3_type_assure,access_g3_type_assure,model_g3_type_assure,,1,0,0,0
 access_g3_regime_hebergement,access_g3_regime_hebergement,model_g3_regime_hebergement,,1,0,0,0
 access_g3_dossier_usager_referent,access_g3_dossier_usager_referent,model_g3_dossier_usager_referent,base.group_user,1,1,1,1
 access_g3_accompagnement,access_g3_accompagnement,model_g3_accompagnement,,1,0,0,0
-
 access_g3_dossier_usager_groupe_educatif,access_g3_dossier_usager_groupe_educatif,model_g3_dossier_usager_groupe_educatif,base.group_user,1,1,1,1
 access_g3_dossier_usager_atelier,access_g3_dossier_usager_atelier,model_g3_dossier_usager_atelier,base.group_user,1,1,1,1
 access_g3_dossier_usager_classe,access_g3_dossier_usager_classe,model_g3_dossier_usager_classe,base.group_user,1,1,1,1
-
 access_g3_donnee_metier,access_g3_donnee_metier,model_g3_donnee_metier,base.group_user,1,1,1,1
+access_g3_dossier_usager_sejour,access_g3_dossier_usager_sejour,model_g3_dossier_usager_sejour,base.group_user,1,1,1,1
 
-
-
-
-
+access_g3_dossier_usager_mesure_protection,access_g3_dossier_usager_mesure_protection,model_g3_dossier_usager_mesure_protection,base.group_user,1,1,1,1
 
 

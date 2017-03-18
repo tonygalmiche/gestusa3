@@ -30,6 +30,10 @@
                     <group>
                         <group string="Etablissement">
                             <field name="name"/>
+
+                            <field name="etablissement_parent_id"     attrs="{'invisible': [('etablissement_parent_id_vsb', '=', False)]}"/>
+                            <field name="etablissement_parent_id_vsb" attrs="{'invisible': 1}"/>
+
                             <field name="directeur_id"/>
 
                             <field name="identifiant"     attrs="{'invisible': [('identifiant_vsb', '=', False)]}"/>

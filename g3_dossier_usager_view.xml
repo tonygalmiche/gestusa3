@@ -10,6 +10,7 @@
                 <tree>
                     <field name="usager_id" />
                     <field name="identifiant" />
+                    <field name="etablissement_ids"/>
                     <field name="color" widget="color"/>
                 </tree>
             </field>
@@ -57,8 +58,10 @@
                                 <field name="etablissement_line" nolabel="1">
                                     <tree editable="bottom"  create="true">
                                         <field name="etablissement_id" widget="many2one_clickable" />
+                                        <field name="provenance_id"    widget="many2one_clickable" />
                                         <field name="date_entree"/>
                                         <field name="date_sortie_prevue"/>
+                                        <field name="destination_id"   widget="many2one_clickable" />
                                     </tree>
                                 </field>
 
@@ -121,64 +124,100 @@
                             </page>
                             <page string="Éducatif" groups="gestusa3.group_g3_profil_02" >
                                 <p style="background-color:LawnGreen">Onglet visible uniquement au profil Educatif</p>
-                                <group>
-                                    <group>
-                                        <field name="regime_hebergement_id"      attrs="{'invisible': [('regime_hebergement_id_vsb', '=', False)]}"/>
-                                        <field name="regime_hebergement_id_vsb"  attrs="{'invisible': 1}" />
 
-                                        <field name="referent_usager_id"      attrs="{'invisible': [('referent_usager_id_vsb', '=', False)]}" />
-                                        <field name="referent_usager_id_vsb"  attrs="{'invisible': 1}" />
-                                    </group>
-                                    <group>
-                                    </group>
+
+                                <group string="Séjours" >
+                                    <field name="sejour_line" nolabel="1">
+                                        <tree create="true">
+                                            <field name="etablissement_id" widget="many2one_clickable" />
+                                            <field name="date_entree"/>
+                                            <field name="date_sortie"/>
+                                            <field name="regime_hebergement_id"/>
+                                            <field name="referent_usager_id"/>
+                                        </tree>
+                                        <form>
+                                            <group>
+                                                <group>
+                                                    <field name="etablissement_id" />
+                                                    <field name="date_entree"/>
+                                                    <field name="date_sortie"/>
+                                                </group>
+                                                <group>
+                                                    <field name="regime_hebergement_id"      attrs="{'invisible': [('regime_hebergement_id_vsb', '=', False)]}"/>
+                                                    <field name="regime_hebergement_id_vsb"  attrs="{'invisible': 1}" />
+
+                                                    <field name="referent_usager_id"      attrs="{'invisible': [('referent_usager_id_vsb', '=', False)]}" />
+                                                    <field name="referent_usager_id_vsb"  attrs="{'invisible': 1}" />
+                                                </group>
+                                            </group>
+
+                                            <group>
+                                                <group string="Référents"      attrs="{'invisible': [('referent_line_vsb', '=', False)]}">
+                                                    <field name="referent_line_vsb"  attrs="{'invisible': 1}" />
+                                                    <field name="referent_line"      nolabel="1" >
+                                                        <tree editable="bottom"  create="true"  >
+                                                            <field name="accompagnement_id" />
+                                                            <field name="nom" />
+                                                        </tree>
+                                                    </field>
+                                                </group>
+                                                <group string="Groupe(s) éducatif(s)"      attrs="{'invisible': [('groupe_educatif_line_vsb', '=', False)]}">
+                                                    <field name="groupe_educatif_line_vsb"  attrs="{'invisible': 1}" />
+                                                    <field name="groupe_educatif_line"      nolabel="1" >
+                                                        <tree editable="bottom"  create="true"  >
+                                                            <field name="name" />
+                                                        </tree>
+                                                    </field>
+                                                </group>
+                                            </group>
+
+                                            <group>
+                                                <group string="Atelier(s)"      attrs="{'invisible': [('atelier_line_vsb', '=', False)]}">
+                                                    <field name="atelier_line_vsb"  attrs="{'invisible': 1}" />
+                                                    <field name="atelier_line"      nolabel="1" >
+                                                        <tree editable="bottom"  create="true"  >
+                                                            <field name="name" />
+                                                        </tree>
+                                                    </field>
+                                                </group>
+                                                <group string="Classe(s)"      attrs="{'invisible': [('classe_line_vsb', '=', False)]}">
+                                                    <field name="classe_line_vsb"  attrs="{'invisible': 1}" />
+                                                    <field name="classe_line"      nolabel="1" >
+                                                        <tree editable="bottom"  create="true"  >
+                                                            <field name="name" />
+                                                        </tree>
+                                                    </field>
+                                                </group>
+                                            </group>
+
+                                        </form>
+
+                                    </field>
                                 </group>
-
-                                <group>
-                                    <group string="Référents"      attrs="{'invisible': [('referent_line_vsb', '=', False)]}">
-                                        <field name="referent_line_vsb"  attrs="{'invisible': 1}" />
-                                        <field name="referent_line"      nolabel="1" >
-                                            <tree editable="bottom"  create="true"  >
-                                                <field name="accompagnement_id" />
-                                                <field name="nom" />
-                                            </tree>
-                                        </field>
-                                    </group>
-                                    <group string="Groupe(s) éducatif(s)"      attrs="{'invisible': [('groupe_educatif_line_vsb', '=', False)]}">
-                                        <field name="groupe_educatif_line_vsb"  attrs="{'invisible': 1}" />
-                                        <field name="groupe_educatif_line"      nolabel="1" >
-                                            <tree editable="bottom"  create="true"  >
-                                                <field name="name" />
-                                            </tree>
-                                        </field>
-                                    </group>
-                                </group>
-
-                                <group>
-                                    <group string="Atelier(s)"      attrs="{'invisible': [('atelier_line_vsb', '=', False)]}">
-                                        <field name="atelier_line_vsb"  attrs="{'invisible': 1}" />
-                                        <field name="atelier_line"      nolabel="1" >
-                                            <tree editable="bottom"  create="true"  >
-                                                <field name="name" />
-                                            </tree>
-                                        </field>
-                                    </group>
-                                    <group string="Classe(s)"      attrs="{'invisible': [('classe_line_vsb', '=', False)]}">
-                                        <field name="classe_line_vsb"  attrs="{'invisible': 1}" />
-                                        <field name="classe_line"      nolabel="1" >
-                                            <tree editable="bottom"  create="true"  >
-                                                <field name="name" />
-                                            </tree>
-                                        </field>
-                                    </group>
-                                </group>
-
-
                             </page>
 
 
-                            <page string="Paramédical" groups="gestusa3.group_g3_profil_03" >
-                                <p style="background-color:LawnGreen">Onglet visible uniquement au profil Paramédical</p>
+                            <page string="Social" >
+                                <group>
+                                    <group>
+                                        <field name="genogramme"      attrs="{'invisible': [('genogramme_vsb', '=', False)]}"/>
+                                        <field name="genogramme_vsb"  attrs="{'invisible': 1}" />
+                                    </group>
+                                </group>
+                                <group string="Mesures de protection">
+                                    <field name="mesure_protection_line" nolabel="1">
+                                        <tree editable="bottom"  create="true">
+                                            <field name="type_mesure"/>
+                                            <field name="date_debut"/>
+                                            <field name="date_fin"/>
+                                            <field name="piece_jointe"/>
+                                            <field name="commentaire"/>
+                                        </tree>
+                                    </field>
+                                </group>
                             </page>
+
+
                             <page string="Entourage" >
                                 <field name="contact_line" nolabel="1">
                                     <tree editable="bottom"  create="true">
@@ -313,6 +352,8 @@
             <field name="arch" type="xml">
                 <search>
                     <field name="usager_id"/>
+                    <field name="identifiant"/>
+                    <field name="etablissement_ids"/>
                 </search>
             </field>
         </record>

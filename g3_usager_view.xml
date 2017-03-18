@@ -89,6 +89,7 @@
 
                         <group attrs="{'invisible': [('categorie', '=', False)]}">
                             <field name="commentaire"/>
+                            <field name="createur_id"/>
                         </group>
 
 
@@ -117,6 +118,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">g3.usager</field>
             <field name="view_mode">tree,form</field>
+            <field name="domain">[('createur_id','=',uid)]</field>
         </record>
 
 

@@ -35,7 +35,12 @@ class g3_usager(models.Model):
     secours_cp       = fields.Char('Code postal')
     secours_ville    = fields.Char('Ville')
     commentaire      = fields.Text('Commentaire')
+    createur_id      = fields.Many2one('res.users', 'Créé par', readonly=True)
+    
 
+    _defaults = {
+        'createur_id': lambda obj, cr, uid, ctx=None: uid,
+    }
 
     @api.multi
     @api.depends('nom', 'prenom')
@@ -95,7 +100,14 @@ class g3_usager(models.Model):
     def cherche_doublon(self,obj):
         r=self.env['g3.usager'].search([ ['categorie', '=', obj.categorie],['type', '=', obj.type],['sexe', '=', obj.sexe],['nom', '=', obj.nom],['prenom', '=', obj.prenom],['date_naissance', '=', obj.date_naissance] ])
         if len(r)>1:
-            raise Warning(u"Cet usager ou ce contact existe déjà : "+str(obj.categorie or '')+" "+str(obj.type or '')+" "+str(obj.sexe or '')+" "+obj.nom+" "+str(obj.prenom or '')+u" né le "+str(obj.date_naissance or ''))
+            raise Warning(u"Cet usager ou ce contact existe déjà : "+\
+                str(obj.categorie or '')+" "+\
+                str(obj.type or '')+" "+\
+                str(obj.sexe or '')+" "+\
+                obj.nom+" "+str(obj.prenom or '')+u" né le "+\
+                str(obj.date_naissance or '')+u'\ncréé par '+\
+                str(obj.createur_id.name or '')
+            )
 
 
     @api.multi
