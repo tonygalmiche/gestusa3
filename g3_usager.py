@@ -47,7 +47,7 @@ class g3_usager(models.Model):
     def name_get(self):
         result = []
         for obj in self:
-            name= obj.nom+" "+(obj.prenom or '')
+            name= obj.nom+u" "+(obj.prenom or u'')
             result.append((obj.id,name))
         return result
 
@@ -58,8 +58,11 @@ class g3_usager(models.Model):
             args = []
         recs = self.browse()
         if name:
-            print args, name
-            args=[args[0],'|',['nom','ilike',name],['prenom','ilike',name]]
+            #print args, name
+            if len(args)>0:
+                args=[args[0],'|',['nom','ilike',name],['prenom','ilike',name]]
+            else:
+                args=['|',['nom','ilike',name],['prenom','ilike',name]]
         recs = self.search(args, limit=limit)
         return recs.name_get()
 
