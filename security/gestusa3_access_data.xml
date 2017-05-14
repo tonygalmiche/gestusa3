@@ -82,6 +82,20 @@
         <field eval="1" name="perm_read"/>
         <field eval="1" name="perm_create"/>
     </record>
+
+    <record id="g3_dossier_usager_access_complet_createur" model="ir.rule">
+        <field name="name">Dossier usager - Accès complet au créateur</field>
+        <field name="model_id" ref="model_g3_dossier_usager"/>
+        <field name="domain_force">[( 'createur_id', '=', user.id) ]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field eval="1" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="1" name="perm_create"/>
+    </record>
+
+
+
     <record id="g3_dossier_usager_access_consultation_da" model="ir.rule">
         <field name="name">Dossier usager - Accès en consultation au groupe DA</field>
         <field name="model_id" ref="model_g3_dossier_usager"/>

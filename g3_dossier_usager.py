@@ -101,9 +101,6 @@ class g3_dossier_usager(models.Model):
     formation_line            = fields.One2many('g3.dossier.usager.formation', 'dossier_usager_id', u"Formations")
     formation_line_vsb        = fields.Boolean('Champ technique', store=False, compute='_compute')
 
-
-
-
     accessibilite_line = fields.One2many('g3.dossier.usager.accessibilite', 'dossier_usager_id', u"Accessibilités")
     group_01_id   = fields.Many2one('g3.groupe', g3_groupes['01'])
     group_02_id   = fields.Many2one('g3.groupe', g3_groupes['02'])
@@ -114,8 +111,12 @@ class g3_dossier_usager(models.Model):
     group_07_id   = fields.Many2one('g3.groupe', g3_groupes['07'])
     group_08_id   = fields.Many2one('g3.groupe', g3_groupes['08'])
 
+    createur_id   = fields.Many2one('res.users', 'Créé par', readonly=True)
 
 
+    _defaults = {
+        'createur_id': lambda obj, cr, uid, ctx=None: uid,
+    }
 
 
     @api.depends('usager_id')
