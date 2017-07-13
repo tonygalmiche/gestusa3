@@ -58,7 +58,21 @@ class g3_dossier_usager(models.Model):
     etablissement_ids         = fields.Many2many('g3.etablissement', 'g3_dossier_usager_etablissement_rel', 'dossier_id', 'etablissement_id', u"Etablissements", store=True, compute='_compute_etablissement_ids')
     code_couleur              = fields.Selection(g3_couleurs, "Code couleur")
     code_couleur_vsb          = fields.Boolean('Champ technique', store=False, compute='_compute')
-    color                     = fields.Char(string="Color", help="Choose your color")
+
+    #color                     = fields.Char(string="Color", help="Choose your color")
+    color = fields.Selection([
+        ('#FF0000','rouge'),
+        ('#FFA500','orange'),
+        ('#0000FF','bleu'),
+        ('#008000','vert'),
+        ('#FFFF00','jaune'),
+        ('#FFC0CB','rose'),
+        ('#FF00FF','fuchsia'),
+        ('#800000','marron'),
+        ('#000000','noir'),
+        ('#FFFFFF','blanc'),
+    ], "Code Couleur")
+
     nationalite_id            = fields.Many2one('g3.nationalite', 'Nationalité')
     nationalite_id_vsb        = fields.Boolean('Champ technique', store=False, compute='_compute')
 
@@ -137,10 +151,15 @@ class g3_dossier_usager(models.Model):
                     adresse = adresse + date_naissance+u'\n'
                 adresse = adresse + \
                     (obj.usager_id.adresse1 or '')+u' '  + \
-                    (obj.usager_id.adresse1 or '')+u' '  + \
                     (obj.usager_id.adresse2 or '')+u'\n' + \
                     (obj.usager_id.cp       or '')+u' '  + \
                     (obj.usager_id.ville    or '')
+                if obj.usager_id.secours_adresse1:
+                    adresse = adresse + u'\nAdresse de secours : \n' + \
+                        (obj.usager_id.secours_adresse1 or '')+u' '  + \
+                        (obj.usager_id.secours_adresse2 or '')+u'\n' + \
+                        (obj.usager_id.secours_cp       or '')+u' '  + \
+                        (obj.usager_id.secours_ville    or '')
                 obj.usager_adresse1 = adresse
         #***********************************************************************
 
@@ -569,7 +588,8 @@ class g3_dossier_usager_autorisation(models.Model):
     dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
     name               = fields.Many2one('g3.type.autorisation', "Type d'autorisation", required=True)
     date               = fields.Date('Date')
-    fichier            = fields.Binary('Fichier')
+    #fichier            = fields.Binary('Fichier')
+    fichier_ids        = fields.Many2many('ir.attachment', 'g3_dossier_usager_autorisation_attachment_rel', 'autorisation_id', 'attachment_id', u'Fichiers')
     commentaire        = fields.Char('Commentaire')
 
 

@@ -11,6 +11,8 @@ Gestusa3
     'website': 'http://www.infosaone.com',
     'depends': [
         'web_ckeditor4',
+        'document',
+        'web_m2x_options',
     ],
     'data': [
         'security/gestusa3_security.xml',

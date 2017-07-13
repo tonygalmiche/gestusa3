@@ -47,7 +47,7 @@
                                         <field name="nationalite_id_vsb"  attrs="{'invisible': 1}" />
                                     </group>
                                     <group>
-                                        <field name="color" widget="color"/>
+                                        <field name="color"/>
                                         <!--
                                         <field name="code_couleur"     attrs="{'invisible': [('code_couleur_vsb', '=', False)]}"/>
                                         <field name="code_couleur_vsb" attrs="{'invisible': 1}" />-->
@@ -197,7 +197,7 @@
                             </page>
 
 
-                            <page string="Social" >
+                            <page string="Social" groups="gestusa3.group_g3_profil_04" >
                                 <group>
                                     <group>
                                         <field name="genogramme"      attrs="{'invisible': [('genogramme_vsb', '=', False)]}"/>
@@ -262,10 +262,20 @@
                             <page string="Autorisations" >
                                 <field name="autorisation_line_vsb" attrs="{'invisible': 1}" />
                                 <field name="autorisation_line"     attrs="{'invisible': [('autorisation_line_vsb', '=', False)]}" nolabel="1" >
-                                    <tree editable="bottom"  create="true">
+                                    <form>
+                                        <sheet>
+                                            <group>
+                                                <field name="name" />
+                                                <field name="date" />
+                                                <field name="fichier_ids" widget="many2many_binary"  />
+                                                <field name="commentaire"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                    <tree>
                                         <field name="name" />
                                         <field name="date" />
-                                        <field name="fichier" />
+                                        <field name="fichier_ids"/>
                                         <field name="commentaire"/>
                                     </tree>
                                 </field>

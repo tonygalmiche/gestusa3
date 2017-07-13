@@ -21,7 +21,7 @@
 
 
     <record id="module_category_g3_profil" model="ir.module.category" >
-        <field name="name">Profils Gestusa3</field>
+        <field name="name">Profils Gestusa3 pour afficher les onglets du dossier usager</field>
         <field name="description">Profil Gestusa3</field>
         <field name="sequence">10</field>
    </record>
@@ -37,6 +37,11 @@
         <field name="name">Paramédical</field>
         <field name="category_id" ref="module_category_g3_profil"/>
     </record>
+    <record id="group_g3_profil_04" model="res.groups">
+        <field name="name">Social</field>
+        <field name="category_id" ref="module_category_g3_profil"/>
+    </record>
+
 
 
 
