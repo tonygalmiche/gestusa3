@@ -49,6 +49,7 @@ addons_path = /opt/addons
 Mise en place des addons
 ===================
 
+<code>
 cd /opt/addons
 git clone https://github.com/tonygalmiche/gestusa3.git
 Il est conseillé de télécharger et de dézipper ces addons communautaires dans « /opt/addons » pour un fonctionnement optimale : 
@@ -59,6 +60,7 @@ https://www.odoo.com/apps/modules/8.0/web_tree_many2one_clickable/
 https://www.odoo.com/apps/modules/8.0/web_widget_color/
 https://www.odoo.com/apps/modules/8.0/web_ckeditor4/
 https://www.odoo.com/apps/modules/8.0/web_m2x_options/
+</code>
 
 Lancement de Odoo
 ===================
