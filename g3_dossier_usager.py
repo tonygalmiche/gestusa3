@@ -126,11 +126,43 @@ class g3_dossier_usager(models.Model):
     group_08_id   = fields.Many2one('g3.groupe', g3_groupes['08'])
 
     createur_id   = fields.Many2one('res.users', 'Créé par', readonly=True)
+    active        = fields.Boolean('Actif',default=True)
 
 
     _defaults = {
         'createur_id': lambda obj, cr, uid, ctx=None: uid,
     }
+
+
+
+    def run_desactiver_dossier_action(self, cr, uid, use_new_cursor=False, company_id = False, context=None):
+        self.run_desactiver_dossier(cr, uid, context)
+
+
+    @api.multi
+    def run_desactiver_dossier(self):
+        date_limite=datetime.now()+relativedelta(months=-36)
+        date_limite=date_limite.strftime('%Y-%m-%d')
+        print "#### DEBUT recherche des dossiers à désactiver ####"
+        dossier_obj = self.env['g3.dossier.usager']
+        dossiers=dossier_obj.search([
+            ('id','>',0),
+        ])
+        for dossier in dossiers:
+            lines=dossier.etablissement_line
+            date_sortie='2000-01-01'
+            for line in lines:
+                date=line.date_sortie_prevue
+                if date==False:
+                    date=datetime.now().strftime('%Y-%m-%d')
+                if date>date_sortie:
+                    date_sortie=date
+            if date_sortie<date_limite:
+                print "### Dossier à désactiver ###", dossier,date_limite,date_sortie
+                dossier.active=False
+        print "#### FIN ####"
+
+
 
 
     @api.depends('usager_id')
@@ -428,6 +460,7 @@ class g3_dossier_usager(models.Model):
 
     @api.multi
     def write(self,vals):
+        #self.run_desactiver_dossier()
         res=super(g3_dossier_usager, self).write(vals)
         for obj in self:
             self.contraintes(obj)
@@ -457,10 +490,10 @@ class g3_dossier_usager_etablissement(models.Model):
 
     dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     etablissement_id   = fields.Many2one('g3.etablissement', 'Etablissement'  , required=True)
-    provenance_id      = fields.Many2one('g3.etablissement', 'Provenance')
+    provenance         = fields.Char('Provenance')
     date_entree        = fields.Date("Date d'entrée", required=True)
     date_sortie_prevue = fields.Date("Date de sortie prévue")
-    destination_id     = fields.Many2one('g3.etablissement', 'Destination')
+    destination        = fields.Char('Destination')
 
 
 class g3_dossier_usager_sejour(models.Model):
@@ -515,8 +548,9 @@ class g3_dossier_usager_mesure_protection(models.Model):
     type_mesure       = fields.Selection([('tutelle','Tutelle'),('curatelle','Curatelle')], "Type de mesure")
     date_debut        = fields.Date("Date de début", required=True)
     date_fin          = fields.Date("Date de fin")
-    piece_jointe      = fields.Binary('Pièce jointe')
+    fichier_ids       = fields.Many2many('ir.attachment', 'g3_dossier_usager_mesure_protection_attachment_rel', 'mesure_protection_id', 'attachment_id', u'Pièces jointes')
     commentaire       = fields.Char("Commentaire")
+    #piece_jointe     = fields.Binary('Pièce jointe')
 
 
 class g3_dossier_usager_document(models.Model):
@@ -526,8 +560,8 @@ class g3_dossier_usager_document(models.Model):
     dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     name               = fields.Many2one('g3.type.document', 'Type de document', required=True)
     date               = fields.Date("Date de validité")
-    piece_jointe       = fields.Binary('Pièce jointe')
-
+    fichier_ids        = fields.Many2many('ir.attachment', 'g3_dossier_usager_document_attachment_rel', 'document_id', 'attachment_id', u'Pièces jointes')
+    #piece_jointe      = fields.Binary('Pièce jointe')
 
 class g3_dossier_usager_notification(models.Model):
     _name='g3.dossier.usager.notification'
@@ -539,10 +573,10 @@ class g3_dossier_usager_notification(models.Model):
     en_date              = fields.Date("En date")
     date_debut           = fields.Date("Date de début")
     date_fin             = fields.Date("Date de fin")
-    piece_jointe         = fields.Binary('Pièce jointe')
+    fichier_ids          = fields.Many2many('ir.attachment', 'g3_dossier_usager_notification_attachment_rel', 'notification_id', 'attachment_id', u'Pièces jointes')
     prescripteur         = fields.Many2one('g3.usager', 'Prescripteur',  domain=[('categorie', '=', 'partenaire_exterieur')])
     commentaire          = fields.Char("Commentaire")
-
+    #piece_jointe        = fields.Binary('Pièce jointe')
 
 class g3_dossier_usager_affiliation(models.Model):
     _name='g3.dossier.usager.affiliation'
@@ -556,12 +590,12 @@ class g3_dossier_usager_affiliation(models.Model):
     en_date              = fields.Date("En date")
     date_debut           = fields.Date("Date de début")
     date_fin             = fields.Date("Date de fin")
-    piece_jointe         = fields.Binary('Pièce jointe')
+    fichier_ids          = fields.Many2many('ir.attachment', 'g3_dossier_usager_affiliation_attachment_rel', 'affiliation_id', 'attachment_id', u'Pièces jointes')
     affiliateur          = fields.Many2one('g3.usager', 'Affiliateur',  domain=[('categorie', '=', 'partenaire_exterieur')])
     code_organisme       = fields.Char("Code organisme")
     code_gestion         = fields.Char("Code gestion")
     commentaire          = fields.Char("Commentaire")
-
+    #piece_jointe        = fields.Binary('Pièce jointe')
 
 
 
@@ -589,7 +623,7 @@ class g3_dossier_usager_autorisation(models.Model):
     name               = fields.Many2one('g3.type.autorisation', "Type d'autorisation", required=True)
     date               = fields.Date('Date')
     #fichier            = fields.Binary('Fichier')
-    fichier_ids        = fields.Many2many('ir.attachment', 'g3_dossier_usager_autorisation_attachment_rel', 'autorisation_id', 'attachment_id', u'Fichiers')
+    fichier_ids        = fields.Many2many('ir.attachment', 'g3_dossier_usager_autorisation_attachment_rel', 'autorisation_id', 'attachment_id', u'Pièces jointes')
     commentaire        = fields.Char('Commentaire')
 
 
@@ -607,7 +641,7 @@ class g3_dossier_usager_parcours(models.Model):
     _order='dossier_usager_id,date_entree'
 
     dossier_usager_id       = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
-    date_entree             = fields.Date("Date d'entée")
+    date_entree             = fields.Date("Date d'entrée")
     type_structure_id       = fields.Many2one('g3.type.structure', 'Type de structure')
     nom_structure           = fields.Char('Nom de la structure')
     date_sortie             = fields.Date("Date de sortie")
@@ -620,7 +654,8 @@ class g3_dossier_usager_diplome(models.Model):
     dossier_usager_id = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     name              = fields.Char("Diplome / attestation")
     date              = fields.Date("Date")
-    piece_jointe      = fields.Binary('Pièce jointe')
+    fichier_ids       = fields.Many2many('ir.attachment', 'g3_dossier_usager_diplome_attachment_rel', 'diplome_id', 'attachment_id', u'Pièces jointes')
+    #piece_jointe     = fields.Binary('Pièce jointe')
 
 class g3_dossier_usager_formation(models.Model):
     _name='g3.dossier.usager.formation'
@@ -658,7 +693,8 @@ class g3_dossier_usager_info_pratique(models.Model):
 class g3_dossier_usager_referent(models.Model):
     _name='g3.dossier.usager.referent'
     _order='accompagnement_id'
-    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Personne accompagnée', required=True, ondelete='cascade')
+    sejour_id          = fields.Many2one('g3.dossier.usager.sejour', 'Personne accompagnée', required=True, ondelete='cascade')
+    referent_id        = fields.Many2one('res.users', 'Référent')
     accompagnement_id  = fields.Many2one('g3.accompagnement', 'Accompagnement')
     nom                = fields.Char('Commentaire')
 

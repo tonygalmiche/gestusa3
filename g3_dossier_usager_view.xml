@@ -58,24 +58,31 @@
                                 <field name="etablissement_line" nolabel="1">
                                     <tree editable="bottom"  create="true">
                                         <field name="etablissement_id" widget="many2one_clickable" />
-                                        <field name="provenance_id"    widget="many2one_clickable" />
+                                        <field name="provenance"/>
                                         <field name="date_entree"/>
                                         <field name="date_sortie_prevue"/>
-                                        <field name="destination_id"   widget="many2one_clickable" />
+                                        <field name="destination" />
                                     </tree>
                                 </field>
-
                             </page>
-
                             <page string="Secrétariat" groups="gestusa3.group_g3_profil_01" >
                                 <p style="background-color:LawnGreen">Onglet visible uniquement au profil Secrétariat</p>
                                 <group string="Documents"            attrs="{'invisible': [('document_line_vsb', '=', False)]}">
                                     <field name="document_line_vsb"  attrs="{'invisible': 1}" />
                                     <field name="document_line"      nolabel="1" >
-                                        <tree editable="bottom"  create="true">
+                                        <form>
+                                            <sheet>
+                                                <group>
+                                                    <field name="name" />
+                                                    <field name="date" />
+                                                    <field name="fichier_ids" widget="many2many_binary"  />
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                        <tree>
                                             <field name="name" />
                                             <field name="date" />
-                                            <field name="piece_jointe" />
+                                            <field name="fichier_ids"/>
                                         </tree>
                                     </field>
                                 </group>
@@ -83,44 +90,67 @@
                                     <field name="num_secu"      attrs="{'invisible': [('num_secu_vsb', '=', False)]}" />
                                     <field name="num_secu_vsb"  attrs="{'invisible': 1}" />
                                 </group>
-
                                 <group string="Notifications"            attrs="{'invisible': [('notification_line_vsb', '=', False)]}">
                                     <field name="notification_line_vsb"  attrs="{'invisible': 1}" />
                                     <field name="notification_line"      nolabel="1" >
-                                        <tree editable="bottom"  create="true" colors="red:date_fin and (date_fin&lt;current_date)" >
+                                        <form>
+                                            <sheet>
+                                                <group>
+                                                    <field name="type_notification_id" />
+                                                    <field name="numero" />
+                                                    <field name="en_date" />
+                                                    <field name="date_debut" />
+                                                    <field name="date_fin" />
+                                                    <field name="fichier_ids" widget="many2many_binary"  />
+                                                    <field name="prescripteur" widget="many2one_clickable"  />
+                                                    <field name="commentaire" />
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                        <tree colors="red:date_fin and (date_fin&lt;current_date)" >
                                             <field name="type_notification_id" />
                                             <field name="numero" />
                                             <field name="en_date" />
                                             <field name="date_debut" />
                                             <field name="date_fin" />
-                                            <field name="piece_jointe" />
+                                            <field name="fichier_ids" />
                                             <field name="prescripteur" widget="many2one_clickable"  />
                                             <field name="commentaire" />
                                         </tree>
                                     </field>
                                 </group>
-
-
                                 <group string="Affiliations"            attrs="{'invisible': [('affiliation_line_vsb', '=', False)]}">
                                     <field name="affiliation_line_vsb"  attrs="{'invisible': 1}" />
                                     <field name="affiliation_line"      nolabel="1" >
-                                        <tree editable="bottom"  create="true" colors="red:date_fin and (date_fin&lt;current_date)" >
+                                        <form>
+                                            <sheet>
+                                                <group>
+                                                    <field name="type_affiliation_id" />
+                                                    <field name="type_assure_id" />
+                                                    <field name="nom_assure_autre" />
+                                                    <field name="en_date" />
+                                                    <field name="date_debut" />
+                                                    <field name="date_fin" />
+                                                    <field name="fichier_ids" widget="many2many_binary"  />
+                                                    <field name="affiliateur" widget="many2one_clickable" />
+                                                    <field name="code_organisme" />
+                                                    <field name="code_gestion" />
+                                                    <field name="commentaire" />
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                        <tree colors="red:date_fin and (date_fin&lt;current_date)" >
                                             <field name="type_affiliation_id" />
                                             <field name="type_assure_id" />
                                             <field name="nom_assure_autre" />
-                                            <field name="numero" />
-                                            <field name="en_date" />
                                             <field name="date_debut" />
                                             <field name="date_fin" />
-                                            <field name="piece_jointe" />
+                                            <field name="fichier_ids" />
                                             <field name="affiliateur" widget="many2one_clickable" />
-                                            <field name="code_organisme" />
-                                            <field name="code_gestion" />
                                             <field name="commentaire" />
                                         </tree>
                                     </field>
                                 </group>
-
                             </page>
                             <page string="Éducatif" groups="gestusa3.group_g3_profil_02" >
                                 <p style="background-color:LawnGreen">Onglet visible uniquement au profil Educatif</p>
@@ -156,6 +186,7 @@
                                                     <field name="referent_line_vsb"  attrs="{'invisible': 1}" />
                                                     <field name="referent_line"      nolabel="1" >
                                                         <tree editable="bottom"  create="true"  >
+                                                            <field name="referent_id" />
                                                             <field name="accompagnement_id" />
                                                             <field name="nom" />
                                                         </tree>
@@ -206,11 +237,22 @@
                                 </group>
                                 <group string="Mesures de protection">
                                     <field name="mesure_protection_line" nolabel="1">
-                                        <tree editable="bottom"  create="true">
+                                        <form>
+                                            <sheet>
+                                                <group>
+                                                    <field name="type_mesure"/>
+                                                    <field name="date_debut"/>
+                                                    <field name="date_fin"/>
+                                                    <field name="fichier_ids" widget="many2many_binary"  />
+                                                    <field name="commentaire"/>
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                        <tree>
                                             <field name="type_mesure"/>
                                             <field name="date_debut"/>
                                             <field name="date_fin"/>
-                                            <field name="piece_jointe"/>
+                                            <field name="fichier_ids"/>
                                             <field name="commentaire"/>
                                         </tree>
                                     </field>
@@ -307,10 +349,19 @@
                                 <group string="Diplômes et attestations" attrs="{'invisible': [('diplome_line_vsb', '=', False)]}" >
                                     <field name="diplome_line_vsb"       attrs="{'invisible': 1}" />
                                     <field name="diplome_line"           nolabel="1" >
-                                        <tree editable="bottom" create="true">
+                                        <form>
+                                            <sheet>
+                                                <group>
+                                                    <field name="name" />
+                                                    <field name="date" />
+                                                    <field name="fichier_ids" widget="many2many_binary"  />
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                        <tree>
                                             <field name="name" />
                                             <field name="date" />
-                                            <field name="piece_jointe" />
+                                            <field name="fichier_ids" />
                                         </tree>
                                     </field>
                                 </group>
@@ -326,7 +377,7 @@
                                 </group>
                             </page>
 
-                            <page string="Accessibilités" >
+                            <page string="Accessibilités"  groups="base.group_system" >
                                 <field name="accessibilite_line" nolabel="1">
                                     <tree editable="bottom"  create="false">
                                         <field name="etablissement_id" readonly="1" widget="many2one_clickable" />
@@ -353,6 +404,7 @@
 
                                 <group>
                                     <field name="createur_id"/>
+                                    <field name="active"/>
                                 </group>
 
                             </page>
@@ -946,6 +998,26 @@
             <field name="res_model">g3.accompagnement</field>
             <field name="view_mode">tree,form</field>
         </record>
+
+
+        <!-- Action automatisés pour désactiver les dossiers au bout de 3 ans -->
+        <record forcecreate="True" id="g3_desactiver_dossier_scheduler_action" model="ir.cron">
+            <field name="name">Désactiver les dossiers au bout de 3 ans</field>
+            <field name="active" eval="True" />
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <!--<field name="interval_type">days</field>-->
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'g3.dossier.usager'" name="model"/>
+            <field eval="'run_desactiver_dossier_action'" name="function"/>
+            <field eval="'(True,)'" name="args"/>
+        </record>
+
+
+
+
 
 </data>
 </openerp>
