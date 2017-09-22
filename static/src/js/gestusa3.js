@@ -19,7 +19,10 @@ openerp.gestusa3 = function(instance) {
 
             //TODO : J'ai du ajouter manuellement le plugin tableresize pour pouvoir modifier la largeur des colonnes
             //http://ckeditor.com/addon/tableresize
-            extraPlugins: 'filebrowser,button,colorbutton,floatpanel,panel,panelbutton,dialogui,tableresize',
+            //extraPlugins: 'filebrowser,button,colorbutton,floatpanel,panel,panelbutton,dialogui,tableresize',
+
+            //TODO : J'ai désactivé le plugin tableresize pour faciliter l'installation du module gestusa3
+            extraPlugins: 'filebrowser,button,colorbutton,floatpanel,panel,panelbutton,dialogui',
 
             allowedContent: true,
             /*
