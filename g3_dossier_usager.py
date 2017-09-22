@@ -48,7 +48,7 @@ class g3_dossier_usager(models.Model):
     _description = 'Dossier usager'
     _order='usager_id'
 
-    usager_id                 = fields.Many2one('g3.usager', 'Usager', required=True)
+    usager_id                 = fields.Many2one('g3.usager', 'Personne accompagnée', required=True)
     usager_adresse1           = fields.Text("Identité", store=False, compute='_usager_adresse1')
     identifiant               = fields.Char("Identifiant dossier")
     identifiant_vsb           = fields.Boolean('Champ technique', store=False, compute='_compute')
@@ -240,7 +240,7 @@ class g3_dossier_usager(models.Model):
             for dossier in dossiers:
                 for line in dossier.etablissement_line:
                     etb.append(line.etablissement_id.name)
-            raise Warning(u"Ce dossier usager existe déjà dans ces établissements : "+", ".join(etb))
+            raise Warning(u"Cette personne accompagnée existe déjà dans ces établissements : "+", ".join(etb))
 
         t=[]
 
@@ -256,7 +256,7 @@ class g3_dossier_usager(models.Model):
             t.append(row.etablissement_id.id)
         # Blocage si plus de 5 contacts
         if len(obj.contact_line)>5:
-            raise Warning("Il ne faut pas mettre plus de 5 contacts par usager")
+            raise Warning("Il ne faut pas mettre plus de 5 contacts par personne accompagnée")
 
         # Blocage si plus de 2 responsable legal
         ct=0
@@ -264,7 +264,7 @@ class g3_dossier_usager(models.Model):
             if row.responsable_legal:
                 ct=ct+1
         if ct>2:
-            raise Warning("Il ne faut pas mettre plus de 2 responsable légal par usager")
+            raise Warning("Il ne faut pas mettre plus de 2 responsable légal par personne accompagnée")
 
 
 
@@ -364,7 +364,7 @@ class g3_dossier_usager(models.Model):
 
         #for obj in self.sudo():
         for groupe in g3_groupes:
-            #Recherche des membres des groupes en fonction des access dans l'établissement et dans l'usager
+            #Recherche des membres des groupes en fonction des access dans l'établissement et dans la personne accompagnée
             users=[]
             for accessibilite in obj.accessibilite_line:
                 if etablissement_id==False or accessibilite.etablissement_id.id==etablissement_id:
@@ -455,7 +455,7 @@ class g3_dossier_usager_etablissement(models.Model):
     _name='g3.dossier.usager.etablissement'
     _order='dossier_usager_id,date_entree'
 
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     etablissement_id   = fields.Many2one('g3.etablissement', 'Etablissement'  , required=True)
     provenance_id      = fields.Many2one('g3.etablissement', 'Provenance')
     date_entree        = fields.Date("Date d'entrée", required=True)
@@ -467,7 +467,7 @@ class g3_dossier_usager_sejour(models.Model):
     _name='g3.dossier.usager.sejour'
     _order='dossier_usager_id,date_entree'
 
-    dossier_usager_id         = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id         = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     etablissement_id          = fields.Many2one('g3.etablissement', 'Etablissement'  , required=True)
     date_entree               = fields.Date("Date d'entrée", required=True)
     date_sortie               = fields.Date("Date de sortie")
@@ -475,7 +475,7 @@ class g3_dossier_usager_sejour(models.Model):
     regime_hebergement_id     = fields.Many2one('g3.regime.hebergement', "Régime d'hébergement")
     regime_hebergement_id_vsb = fields.Boolean('Champ technique', store=False, compute='_compute')
 
-    referent_usager_id        = fields.Many2one('res.users', 'Référent usager')
+    referent_usager_id        = fields.Many2one('res.users', 'Référent personne accompagnée')
     referent_usager_id_vsb    = fields.Boolean('Champ technique', store=False, compute='_compute')
 
     referent_line             = fields.One2many('g3.dossier.usager.referent', 'sejour_id', u"Référents")
@@ -511,7 +511,7 @@ class g3_dossier_usager_mesure_protection(models.Model):
     _name='g3.dossier.usager.mesure.protection'
     _order='dossier_usager_id,date_debut'
 
-    dossier_usager_id = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     type_mesure       = fields.Selection([('tutelle','Tutelle'),('curatelle','Curatelle')], "Type de mesure")
     date_debut        = fields.Date("Date de début", required=True)
     date_fin          = fields.Date("Date de fin")
@@ -523,7 +523,7 @@ class g3_dossier_usager_document(models.Model):
     _name='g3.dossier.usager.document'
     _order='name'
 
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     name               = fields.Many2one('g3.type.document', 'Type de document', required=True)
     date               = fields.Date("Date de validité")
     piece_jointe       = fields.Binary('Pièce jointe')
@@ -533,7 +533,7 @@ class g3_dossier_usager_notification(models.Model):
     _name='g3.dossier.usager.notification'
     _order='type_notification_id, date_debut'
 
-    dossier_usager_id    = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id    = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     type_notification_id = fields.Many2one('g3.type.notification', "Type de notification")
     numero               = fields.Char("Numéro")
     en_date              = fields.Date("En date")
@@ -548,7 +548,7 @@ class g3_dossier_usager_affiliation(models.Model):
     _name='g3.dossier.usager.affiliation'
     _order='type_affiliation_id, date_debut'
 
-    dossier_usager_id    = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id    = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     type_affiliation_id  = fields.Many2one('g3.type.affiliation', "Type d'affiliation")
     type_assure_id       = fields.Many2one('g3.type.assure',"Assuré")
     nom_assure_autre     = fields.Char("Nom de l'assuré (si Assuré=Autre)")
@@ -572,9 +572,9 @@ class g3_dossier_usager_contact(models.Model):
     _name='g3.dossier.usager.contact'
     _order='name'
 
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     name               = fields.Many2one('g3.usager', 'Contact', required=True)
-    lien_id            = fields.Many2one('g3.lien', "Lien avec l'usager")
+    lien_id            = fields.Many2one('g3.lien', "Lien avec la personne accompagnée")
     responsable_legal  = fields.Boolean('Responsable légal')
     commentaire        = fields.Char('Commentaire')
 
@@ -585,7 +585,7 @@ class g3_dossier_usager_autorisation(models.Model):
     _name='g3.dossier.usager.autorisation'
     _order='name'
 
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     name               = fields.Many2one('g3.type.autorisation', "Type d'autorisation", required=True)
     date               = fields.Date('Date')
     #fichier            = fields.Binary('Fichier')
@@ -597,7 +597,7 @@ class g3_dossier_usager_partenaire(models.Model):
     _name='g3.dossier.usager.partenaire'
     _order='name'
 
-    dossier_usager_id       = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id       = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     name                    = fields.Many2one('g3.usager', 'Partenaire', required=True)
     categorie_partenaire_id = fields.Many2one('g3.categorie.partenaire', "Catégorie de partenaire")
     commentaire             = fields.Char('Commentaire')
@@ -606,7 +606,7 @@ class g3_dossier_usager_parcours(models.Model):
     _name='g3.dossier.usager.parcours'
     _order='dossier_usager_id,date_entree'
 
-    dossier_usager_id       = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id       = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     date_entree             = fields.Date("Date d'entée")
     type_structure_id       = fields.Many2one('g3.type.structure', 'Type de structure')
     nom_structure           = fields.Char('Nom de la structure')
@@ -617,7 +617,7 @@ class g3_dossier_usager_diplome(models.Model):
     _name='g3.dossier.usager.diplome'
     _order='name'
 
-    dossier_usager_id = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     name              = fields.Char("Diplome / attestation")
     date              = fields.Date("Date")
     piece_jointe      = fields.Binary('Pièce jointe')
@@ -626,7 +626,7 @@ class g3_dossier_usager_formation(models.Model):
     _name='g3.dossier.usager.formation'
     _order='name'
 
-    dossier_usager_id = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     name              = fields.Char("Ecole")
     date_debut        = fields.Date("Date de début")
     date_fin          = fields.Date("Date de fin")
@@ -635,7 +635,7 @@ class g3_dossier_usager_accessibilite(models.Model):
     _name='g3.dossier.usager.accessibilite'
     _order='dossier_usager_id,etablissement_id'
 
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     etablissement_id   = fields.Many2one('g3.etablissement', 'Etablissement'  , required=True)
     group_01   = fields.Boolean(g3_groupes['01'])
     group_02   = fields.Boolean(g3_groupes['02'])
@@ -650,7 +650,7 @@ class g3_dossier_usager_accessibilite(models.Model):
 class g3_dossier_usager_info_pratique(models.Model):
     _name='g3.dossier.usager.info.pratique'
     _order='name'
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id  = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True, ondelete='cascade')
     name               = fields.Many2one('g3.info.pratique', 'Information pratique', required=True)
     commentaire        = fields.Char('Commentaire')
 
@@ -658,7 +658,7 @@ class g3_dossier_usager_info_pratique(models.Model):
 class g3_dossier_usager_referent(models.Model):
     _name='g3.dossier.usager.referent'
     _order='accompagnement_id'
-    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Dossier usager', required=True, ondelete='cascade')
+    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Personne accompagnée', required=True, ondelete='cascade')
     accompagnement_id  = fields.Many2one('g3.accompagnement', 'Accompagnement')
     nom                = fields.Char('Commentaire')
 
@@ -666,25 +666,25 @@ class g3_dossier_usager_referent(models.Model):
 class g3_dossier_usager_groupe_educatif(models.Model):
     _name='g3.dossier.usager.groupe.educatif'
     _order='name'
-    dossier_usager_id  = fields.Many2one('g3.dossier.usager.sejour', 'Dossier usager', required=True, ondelete='cascade')
+    dossier_usager_id  = fields.Many2one('g3.dossier.usager.sejour', 'Personne accompagnée', required=True, ondelete='cascade')
     name = fields.Char('Nom')
 
 class g3_dossier_usager_groupe_educatif(models.Model):
     _name='g3.dossier.usager.groupe.educatif'
     _order='name'
-    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Dossier usager', required=True, ondelete='cascade')
+    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Personne accompagnée', required=True, ondelete='cascade')
     name = fields.Char('Nom')
 
 class g3_dossier_usager_atelier(models.Model):
     _name='g3.dossier.usager.atelier'
     _order='name'
-    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Dossier usager', required=True, ondelete='cascade')
+    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Personne accompagnée', required=True, ondelete='cascade')
     name = fields.Char('Nom')
 
 class g3_dossier_usager_classe(models.Model):
     _name='g3.dossier.usager.classe'
     _order='name'
-    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Dossier usager', required=True, ondelete='cascade')
+    sejour_id  = fields.Many2one('g3.dossier.usager.sejour', 'Personne accompagnée', required=True, ondelete='cascade')
     name = fields.Char('Nom')
 
 
@@ -693,7 +693,7 @@ class g3_groupe(models.Model):
     _order='name'
     name              = fields.Char("Nom du groupe", required=True)
     code              = fields.Char("Code", required=True)
-    dossier_usager_id = fields.Many2one('g3.dossier.usager', 'Dossier usager', required=True)
+    dossier_usager_id = fields.Many2one('g3.dossier.usager', 'Personne accompagnée', required=True)
     membre_ids        = fields.Many2many('res.users', 'g3_groupe_membres_rel', 'groupe_id', 'user_id', 'Membres')
 
 
@@ -706,7 +706,7 @@ class g3_nationalite(models.Model):
 class g3_lien(models.Model):
     _name='g3.lien'
     _order='name'
-    name              = fields.Char("Lien avec l'usager", required=True)
+    name              = fields.Char("Lien avec la personne accompagnée", required=True)
 
 
 class g3_situation_familiale(models.Model):

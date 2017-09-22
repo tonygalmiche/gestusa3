@@ -11,7 +11,7 @@ class g3_usager(models.Model):
     _rec_name = 'nom'
 
 
-    categorie        = fields.Selection([('usager', 'Usager'), ('entourage', 'Entourage'), ('partenaire_exterieur', 'Partenaire extérieur')], 'Catégorie', select=True, required=True)
+    categorie        = fields.Selection([('usager', 'Personne accompagnée'), ('entourage', 'Entourage'), ('partenaire_exterieur', 'Partenaire extérieur')], 'Catégorie', select=True, required=True)
     type             = fields.Selection([('physique', 'Personne Physique'), ('morale', 'Personne Morale')], 'Type', required=False)
     sexe             = fields.Selection([('feminin', 'Féminin'), ('masculin', 'Masculin')], 'Sexe', required=False)
     nom              = fields.Char('Nom', required=True)
@@ -103,7 +103,7 @@ class g3_usager(models.Model):
     def cherche_doublon(self,obj):
         r=self.env['g3.usager'].search([ ['categorie', '=', obj.categorie],['type', '=', obj.type],['sexe', '=', obj.sexe],['nom', '=', obj.nom],['prenom', '=', obj.prenom],['date_naissance', '=', obj.date_naissance] ])
         if len(r)>1:
-            raise Warning(u"Cet usager ou ce contact existe déjà : "+\
+            raise Warning(u"Cette personne accompagnée ou ce contact existe déjà : "+\
                 str(obj.categorie or '')+" "+\
                 str(obj.type or '')+" "+\
                 str(obj.sexe or '')+" "+\

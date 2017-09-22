@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <!--Dossier Usager-->
+        <!--Personne accompagnée-->
         <record model="ir.ui.view" id="g3_dossier_usager_tree_view">
             <field name="name">g3.dossier.usager.tree</field>
             <field name="model">g3.dossier.usager</field>
@@ -21,7 +21,7 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet class="oe_form_sheet_width_wider">
-                        <group string="Dossier Usager">
+                        <group string="Personne accompagnée">
                             <group>
                                 <field name="usager_id" domain="[('categorie', '=', 'usager')]"  />
                             </group>
@@ -373,7 +373,7 @@
             </field>
         </record>
         <record id="g3_dossier_usager_action" model="ir.actions.act_window">
-            <field name="name">Dossier Usager</field>
+            <field name="name">Personne accompagnée</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">g3.dossier.usager</field>
             <field name="view_mode">tree,form</field>
@@ -467,7 +467,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <!--Lien avec l'usager-->
+        <!--Lien avec la Personne accompagnée -->
         <record model="ir.ui.view" id="g3_lien_tree_view">
             <field name="name">g3.lien.tree</field>
             <field name="model">g3.lien</field>
@@ -500,7 +500,7 @@
             </field>
         </record>
         <record id="g3_lien_action" model="ir.actions.act_window">
-            <field name="name">Lien avec l'usager</field>
+            <field name="name">Lien avec la personne accompagnée</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">g3.lien</field>
             <field name="view_mode">tree,form</field>

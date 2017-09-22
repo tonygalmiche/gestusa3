@@ -2,7 +2,7 @@
 <openerp>
     <data> 
 
-        <!--Usager-->
+        <!--Personne accompagnée-->
         <record model="ir.ui.view" id="g3_usager_tree_view">
             <field name="name">g3.usager.tree</field>
             <field name="model">g3.usager</field>

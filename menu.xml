@@ -5,12 +5,12 @@
 
         <menuitem name="Gestusa3"            id="menu_gestusa3"         sequence="1" />
 
-        <menuitem name="Dossiers Usagers"    id="menu_usager"           sequence="10" parent="menu_gestusa3"                                     groups=""/>
-        <menuitem name="Dossiers Usagers"    id="menu_usager_10"        sequence="10" parent="menu_usager" action="g3_dossier_usager_action"     groups=""/>
+        <menuitem name="Personnes accompagnées"    id="menu_usager"           sequence="10" parent="menu_gestusa3"                                     groups=""/>
+        <menuitem name="Personnes accompagnées"    id="menu_usager_10"        sequence="10" parent="menu_usager" action="g3_dossier_usager_action"     groups=""/>
         <menuitem name="Contacts"            id="menu_usager_20"        sequence="20" parent="menu_usager" action="g3_usager_action"             groups="base.group_system,gestusa3.group_g3_directeur,gestusa3.group_g3_secretariat"  />
 
-        <menuitem name="Données Métiers" id="donnee_metier_main_menu" sequence="15" parent="menu_gestusa3"                                            groups=""/>
-        <menuitem name="Données Métiers" id="donnee_metier_menu"      sequence="10" parent="donnee_metier_main_menu" action="g3_donnee_metier_action" groups=""/>
+        <menuitem name="Écrits professionnels" id="donnee_metier_main_menu" sequence="15" parent="menu_gestusa3"                                            groups=""/>
+        <menuitem name="Écrits professionnels" id="donnee_metier_menu"      sequence="10" parent="donnee_metier_main_menu" action="g3_donnee_metier_action" groups=""/>
 
         <menuitem name="Etablissements"   id="menu_etablissement"    sequence="20" parent="menu_gestusa3"  />
         <menuitem name="Etablissements"   id="menu_etablissement_10" sequence="10" parent="menu_etablissement" action="g3_etablissement_action" />
@@ -22,7 +22,7 @@
         <menuitem name="Nationalité"               id="menu_nationalite"          sequence="10" parent="menu_tables"   action="g3_nationalite_action" />
         <menuitem name="Profession"                id="menu_profession"           sequence="20" parent="menu_tables"   action="g3_profession_action" />
         <menuitem name="Catégorie socio-professionnelle" id="menu_cat_socio"            sequence="25" parent="menu_tables"   action="g3_cat_socio_professionnelle_action" />
-        <menuitem name="Lien avec l'usager"        id="menu_lien"                 sequence="30" parent="menu_tables"   action="g3_lien_action" />
+        <menuitem name="Lien avec la personne accompagnée"        id="menu_lien"                 sequence="30" parent="menu_tables"   action="g3_lien_action" />
         <menuitem name="Situation familiale"       id="menu_situation_familiale"  sequence="40" parent="menu_tables"   action="g3_situation_familiale_action" />
         <menuitem name="Information pratique"      id="menu_info_pratique"        sequence="50" parent="menu_tables"   action="g3_info_pratique_action" />
         <menuitem name="Type d'autorisation"       id="menu_type_autorisation"    sequence="60" parent="menu_tables"   action="g3_type_autorisation_action" />

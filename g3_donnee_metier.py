@@ -12,7 +12,7 @@ class g3_donnee_metier(models.Model):
     _name='g3.donnee.metier'
     _order='dossier_usager_id,titre'
 
-    dossier_usager_id = fields.Many2one('g3.dossier.usager', "Dossier usager", required=True)
+    dossier_usager_id = fields.Many2one('g3.dossier.usager', "Personne accompagnée", required=True)
     titre              = fields.Char('Titre', required=True)
     contenu           = fields.Text('Contenu')
 
